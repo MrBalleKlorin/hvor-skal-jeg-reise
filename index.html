@@ -10,14 +10,55 @@
     <style>
         #map { height: 350px; border-radius: 16px; border: 2px solid #e2e8f0; z-index: 1; }
         .active-cat { background-color: white !important; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); color: #1e40af !important; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
     </style>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen">
 
+    <div id="omModal" class="modal flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
+                <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+            </div>
+
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 text-center">
+                    <img src="Bilder/Knut Espen.jpg" alt="Knut Espen" class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm">
+                    <p class="font-bold text-slate-800 text-sm">Knut Espen</p>
+                </div>
+                <div class="flex-1 text-center">
+                    <img src="Bilder/Steinar.jpg" alt="Steinar" class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm">
+                    <p class="font-bold text-slate-800 text-sm">Steinar</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-slate-700 leading-relaxed font-medium">
+                    Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.
+                </p>
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-600">
+                    <p class="font-bold text-blue-900 mb-1">Eierskap & Utvikling</p>
+                    <p>Program eiet og utviklet av Knut Espen og Steinar.</p>
+                    <p class="mt-4 text-[11px] text-slate-400 italic">
+                        &copy; 2026 Alle rettigheter forbeholdt.<br>
+                        Versjon 1.2.0 - Sist oppdatert: 24. januar 2026
+                    </p>
+                </div>
+            </div>
+            <button onclick="lukkOm()" class="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-lg">Lukk</button>
+        </div>
+    </div>
+
     <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="mb-8 text-center md:text-left">
-            <h1 class="text-4xl font-black text-blue-900">Hvor skal jeg reise?</h1>
-            <p class="text-slate-600 mt-2 font-medium">BalleKlorin & SylfestStrutle Edition 🚀</p>
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-4xl font-black text-blue-900">Hvor skal jeg reise?</h1>
+                <p class="text-slate-600 mt-2 font-semibold">Knut Espen og Steinars versjon (1.2.0)</p>
+            </div>
+            <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2">
+                <span>ℹ️</span> Om programmet
+            </button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -45,7 +86,7 @@
             </div>
 
             <div class="space-y-4">
-                <h2 class="text-2xl font-bold px-2 flex items-center gap-2">🎯 Beste match:</h2>
+                <h2 class="text-2xl font-bold px-2 flex items-center gap-2 text-slate-800">🎯 Anbefalt lokasjon:</h2>
                 <div id="results" class="grid grid-cols-1 gap-3"></div>
             </div>
         </div>
@@ -76,6 +117,9 @@
             marker.setLatLng(e.latlng);
             oppdaterOversikt();
         });
+
+        function aapneOm() { document.getElementById('omModal').style.display = 'flex'; }
+        function lukkOm() { document.getElementById('omModal').style.display = 'none'; }
 
         async function lastInnData() {
             try {
@@ -116,7 +160,7 @@
         function oppdaterGrensesnitt() {
             ['snø', 'vind', 'tur'].forEach(id => {
                 const btn = document.getElementById('cat-' + id);
-                if (btn) btn.className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
+                if (btn) btn.className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat shadow-inner" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
             });
             const subMenu = document.getElementById('sub-menu');
             subMenu.innerHTML = subValg[hovedKategori].map(item => `
@@ -129,13 +173,13 @@
 
         async function oppdaterOversikt() {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse">Analyserer 3-timers vindu...</div>';
+            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse font-medium">Beregner anbefalinger...</div>';
             
             let liste = [];
             const filtrerteSteder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
 
             if (filtrerteSteder.length === 0) {
-                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400">Ingen steder lagt til i denne kategorien.</div>';
+                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-dashed border-slate-300">Ingen steder registrert her.</div>';
                 return;
             }
 
@@ -144,7 +188,6 @@
                     const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
                     const data = await res.json();
                     
-                    // Snitt av de neste 3 timene
                     const forecast = data.properties.timeseries.slice(0, 3);
                     const avgTemp = forecast.reduce((acc, t) => acc + t.data.instant.details.air_temperature, 0) / 3;
                     const avgWind = forecast.reduce((acc, t) => acc + t.data.instant.details.wind_speed, 0) / 3;
@@ -154,22 +197,17 @@
 
                     let score = 100;
 
-// --- LOGIKK FOR LANGRENN (Kort tur) ---
                     if (hovedKategori === 'snø' && underKategori === 'langrenn') {
                         if (avgTemp > 0) score -= (avgTemp * 25);
                         else if (avgTemp < -8) score -= (Math.abs(avgTemp + 8) * 8);
-                        
-                        // Kjøretid-straff for kort tur (over 45 min)
                         if (kjøreMin > 45) score -= (kjøreMin - 45) * 1.5;
                         if (avgWind > 5) score -= (avgWind * 4);
                     } 
-                    // --- LOGIKK FOR ALPINT ---
                     else if (hovedKategori === 'snø' && underKategori === 'alpint') {
                         if (avgTemp > 2) score -= 40;
                         if (avgWind > 12) score -= 60;
-                        if (kjøreMin > 120) score -= 20; // Tåler lenger vei for alpint
+                        if (kjøreMin > 120) score -= 20;
                     }
-                    // --- LOGIKK FOR VIND ---
                     else if (hovedKategori === 'vind') {
                         if (avgWind < 6) score = 20;
                         else if (avgWind >= 8 && avgWind <= 14) score = 100;
@@ -181,12 +219,16 @@
                 } catch (e) { console.error(e); }
             }
 
-            liste.sort((a, b) => b.score - a.score);
+            // Sortering: Høy score først, deretter kortest tid
+            liste.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return a.tid - b.tid;
+            });
+
             resultsDiv.innerHTML = '';
-            
             liste.forEach(s => {
                 resultsDiv.innerHTML += `
-                    <div class="bg-white p-5 rounded-2xl border ${s.score > 80 ? 'border-green-200' : 'border-slate-100'} flex justify-between items-center shadow-sm">
+                    <div class="bg-white p-5 rounded-2xl border ${s.score > 80 ? 'border-green-200 bg-green-50/20' : 'border-slate-100'} flex justify-between items-center shadow-sm hover:shadow-md transition-all">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-blue-500 tracking-widest">${s.fylke} • ${s.omrade}</span>
                             <h3 class="font-bold text-slate-900 text-xl leading-tight">${s.navn}</h3>
