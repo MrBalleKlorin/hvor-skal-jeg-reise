@@ -82,7 +82,7 @@
                 const respons = await fetch('locations.json');
                 alleSteder = await respons.json();
                 setKategori('snø');
-            } catch (feil) { console.error(feil); }
+            } catch (feil) { console.error("Data-feil:", feil); }
         }
 
         function setKategori(kat) {
@@ -96,6 +96,21 @@
             underKategori = sub;
             oppdaterGrensesnitt();
             oppdaterOversikt();
+        }
+
+        function formaterTid(minutter) {
+            if (minutter < 60) return minutter + " min";
+            const t = Math.floor(minutter / 60);
+            const m = minutter % 60;
+            return m === 0 ? t + " t" : t + " t " + m + " min";
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2-lat1)*Math.PI/180;
+            const dLon = (lon2-lon1)*Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
         function oppdaterGrensesnitt() {
@@ -112,31 +127,15 @@
             `).join('');
         }
 
-        // Formaterer minutter til "1 t 32 min" format
-        function formaterTid(minutter) {
-            if (minutter < 60) return minutter + " min";
-            const t = Math.floor(minutter / 60);
-            const m = minutter % 60;
-            return m === 0 ? t + " t" : t + " t " + m + " min";
-        }
-
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2-lat1)*Math.PI/180;
-            const dLon = (lon2-lon1)*Math.PI/180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        }
-
         async function oppdaterOversikt() {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse">Sjekker forholdene...</div>';
+            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse">Analyserer 3-timers vindu...</div>';
             
             let liste = [];
             const filtrerteSteder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
 
             if (filtrerteSteder.length === 0) {
-                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400">Ingen steder her ennå.</div>';
+                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400">Ingen steder lagt til i denne kategorien.</div>';
                 return;
             }
 
@@ -144,25 +143,41 @@
                 try {
                     const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
                     const data = await res.json();
-                    const info = data.properties.timeseries[0].data.instant.details;
+                    
+                    // Snitt av de neste 3 timene
+                    const forecast = data.properties.timeseries.slice(0, 3);
+                    const avgTemp = forecast.reduce((acc, t) => acc + t.data.instant.details.air_temperature, 0) / 3;
+                    const avgWind = forecast.reduce((acc, t) => acc + t.data.instant.details.wind_speed, 0) / 3;
                     
                     const km = getDistance(startPos.lat, startPos.lon, sted.lat, sted.lon);
-                    const min = Math.round(km * 2.2 + 5); 
+                    const kjøreMin = Math.round(km * 2.2 + 5); 
 
-                    // --- SMART SCORE LOGIKK ---
                     let score = 100;
-                    
-                    if (hovedKategori === 'snø') {
-                        if (info.air_temperature > 0) score -= (info.air_temperature * 15); // Straff for varmegrader
-                        if (info.wind_speed > 7) score -= 20; // Litt straff for mye vind på ski
-                    } else if (hovedKategori === 'vind') {
-                        if (info.wind_speed < 5) score -= 50; // Stor straff for lite vind
-                        if (info.wind_speed > 10) score += 10; // Bonus for mye vind
-                    }
-                    
-                    score = Math.max(0, Math.min(100, Math.round(score))); // Hold score mellom 0-100
 
-                    liste.push({ ...sted, temp: info.air_temperature, vind: info.wind_speed, tid: formaterTid(min), score: score });
+// --- LOGIKK FOR LANGRENN (Kort tur) ---
+                    if (hovedKategori === 'snø' && underKategori === 'langrenn') {
+                        if (avgTemp > 0) score -= (avgTemp * 25);
+                        else if (avgTemp < -8) score -= (Math.abs(avgTemp + 8) * 8);
+                        
+                        // Kjøretid-straff for kort tur (over 45 min)
+                        if (kjøreMin > 45) score -= (kjøreMin - 45) * 1.5;
+                        if (avgWind > 5) score -= (avgWind * 4);
+                    } 
+                    // --- LOGIKK FOR ALPINT ---
+                    else if (hovedKategori === 'snø' && underKategori === 'alpint') {
+                        if (avgTemp > 2) score -= 40;
+                        if (avgWind > 12) score -= 60;
+                        if (kjøreMin > 120) score -= 20; // Tåler lenger vei for alpint
+                    }
+                    // --- LOGIKK FOR VIND ---
+                    else if (hovedKategori === 'vind') {
+                        if (avgWind < 6) score = 20;
+                        else if (avgWind >= 8 && avgWind <= 14) score = 100;
+                    }
+
+                    score = Math.max(0, Math.min(100, Math.round(score)));
+
+                    liste.push({ ...sted, temp: avgTemp.toFixed(1), vind: avgWind.toFixed(1), tid: kjøreMin, visTid: formaterTid(kjøreMin), score: score });
                 } catch (e) { console.error(e); }
             }
 
@@ -171,16 +186,16 @@
             
             liste.forEach(s => {
                 resultsDiv.innerHTML += `
-                    <div class="bg-white p-5 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm">
+                    <div class="bg-white p-5 rounded-2xl border ${s.score > 80 ? 'border-green-200' : 'border-slate-100'} flex justify-between items-center shadow-sm">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-blue-500 tracking-widest">${s.fylke} • ${s.omrade}</span>
                             <h3 class="font-bold text-slate-900 text-xl leading-tight">${s.navn}</h3>
                             <div class="flex gap-4 text-sm font-semibold text-slate-500 mt-2">
-                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="text-blue-600">🚗 ${s.tid}</span>
+                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="${s.tid > 60 ? 'text-orange-500' : 'text-blue-600'}">🚗 ${s.visTid}</span>
                             </div>
                         </div>
                         <div class="text-right ml-4">
-                            <div class="text-3xl font-black ${s.score > 70 ? 'text-green-500' : 'text-blue-600'}">${s.score}%</div>
+                            <div class="text-3xl font-black ${s.score > 70 ? 'text-green-600' : 'text-slate-400'}">${s.score}%</div>
                         </div>
                     </div>`;
             });
