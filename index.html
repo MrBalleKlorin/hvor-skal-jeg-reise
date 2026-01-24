@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hvor skal jeg reise? 🗺️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 400px; border-radius: 16px; border: 2px solid #e2e8f0; z-index: 1; }
+        @media (max-width: 768px) { #map { height: 250px; } }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen">
+
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center md:text-left">
+            <h1 class="text-4xl font-black text-blue-900">Hvor skal jeg reise?</h1>
+            <p class="text-slate-600 mt-2 font-medium">Data hentes nå fra locations.json</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold mb-4">1. Velg startsted</h2>
+                    <div id="map"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold mb-4">2. Velg turtype</h2>
+                    <div class="flex gap-4">
+                        <button onclick="setModus('kort')" id="btn-kort" class="flex-1 py-4 rounded-2xl font-bold border-2 bg-blue-600 text-white">Kjapp tur</button>
+                        <button onclick="setModus('lang')" id="btn-lang" class="flex-1 py-4 rounded-2xl font-bold border-2 bg-white text-slate-600">Heldagstur</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold px-2">🎯 Beste treff:</h2>
+                <div id="results" class="grid grid-cols-1 gap-3">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let startPos = { lat: 59.949, lon: 10.817 };
+        let modus = 'kort';
+        let marker;
+        let alleSteder = []; // Global liste som fylles fra JSON
+
+        // Initier kart
+        const map = L.map('map').setView([startPos.lat, startPos.lon], 8);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        marker = L.marker([startPos.lat, startPos.lon]).addTo(map);
+
+        map.on('click', function(e) {
+            startPos = { lat: e.latlng.lat, lon: e.latlng.lng };
+            marker.setLatLng(e.latlng);
+            oppdaterOversikt();
+        });
+
+        // NY FUNKSJON: Henter data fra JSON-filen din og normaliserer region-feltene
+        async function lastInnData() {
+            try {
+                const respons = await fetch('locations.json');
+                let data = await respons.json();
+
+                // Normaliserer ulike navn på det beskrivende regionfeltet (f.eks. "omrade", "region", "beskrivende_region")
+                alleSteder = data.map(s => ({
+                    ...s,
+                    region: s.omrade || s.region || s.beskrivende_region || s.beskrivelse || '',
+                    fylke: s.fylke || ''
+                }));
+
+                oppdaterOversikt();
+            } catch (feil) {
+                document.getElementById('results').innerHTML = "Feil: Kunne ikke laste locations.json. Husk å bruke 'Live Server'!";
+                console.error(feil);
+            }
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2-lat1)*Math.PI/180;
+            const dLon = (lon2-lon1)*Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        async function oppdaterOversikt() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse">Analyserer forhold...</div>';
+            
+            let liste = [];
+
+            for (const sted of alleSteder) {
+                try {
+                    const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
+                    const data = await res.json();
+                    const info = data.properties.timeseries[0].data.instant.details;
+                    
+                    const km = getDistance(startPos.lat, startPos.lon, sted.lat, sted.lon);
+                    const min = Math.round(km * 2.2 + 5); 
+
+                    let vScore = 100 - (info.wind_speed * 4);
+                    if (info.air_temperature > 0) vScore -= 40;
+                    
+                    const halveringstid = (modus === 'kort') ? 40 : 180;
+                    const tidsFaktor = Math.pow(0.5, min / halveringstid);
+                    const totalScore = Math.max(0, vScore * tidsFaktor);
+
+                    liste.push({ ...sted, temp: info.air_temperature, vind: info.wind_speed, tid: min, score: Math.round(totalScore) });
+                } catch (e) {}
+            }
+
+            liste.sort((a, b) => b.score - a.score);
+            resultsDiv.innerHTML = '';
+            
+            liste.forEach(s => {
+                const colorClass = s.score > 70 ? 'text-green-500' : s.score > 30 ? 'text-orange-500' : 'text-slate-300';
+                resultsDiv.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-xl">${s.navn}</h3>
+                            <div class="text-sm text-slate-500 mt-1">${s.fylke ? 'Fylke: ' + s.fylke : ''}${s.fylke && s.region ? ' • ' : ''}${s.region ? s.region : ''}</div>
+                            <div class="flex gap-4 text-sm font-semibold text-slate-500 mt-2">
+                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="text-blue-600 font-bold">🚗 ${s.tid} min</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-4xl font-black ${colorClass}">${s.score}%</div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function setModus(m) {
+            modus = m;
+            document.getElementById('btn-kort').className = m === 'kort' ? "flex-1 py-4 rounded-2xl font-bold border-2 bg-blue-600 text-white" : "flex-1 py-4 rounded-2xl font-bold border-2 bg-white text-slate-600";
+            document.getElementById('btn-lang').className = m === 'lang' ? "flex-1 py-4 rounded-2xl font-bold border-2 bg-blue-600 text-white" : "flex-1 py-4 rounded-2xl font-bold border-2 bg-white text-slate-600";
+            oppdaterOversikt();
+        }
+
+        // Start ved å laste JSON
+        lastInnData();
+    </script>
+</body>
+</html>
