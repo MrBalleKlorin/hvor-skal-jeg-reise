@@ -35,10 +35,13 @@
                         <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
                         Hva skal du gjøre?
                     </h2>
+                    
                     <div class="flex gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
                         <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
                         <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
+                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
                     </div>
+
                     <div id="sub-menu" class="grid grid-cols-2 gap-2"></div>
                 </div>
             </div>
@@ -59,7 +62,13 @@
 
         const subValg = {
             'snø': [{ id: 'langrenn', navn: '🎿 Langrenn' }, { id: 'alpint', navn: '🏂 Alpint' }],
-            'vind': [{ id: 'hav', navn: '🌊 Ved havet' }, { id: 'innsjø', navn: '🛶 Innsjø' }]
+            'vind': [{ id: 'hav', navn: '🌊 Ved havet' }, { id: 'innsjø', navn: '🛶 Innsjø' }],
+            'tur': [
+                { id: 'kyst', navn: '🌊 Kyst' },
+                { id: 'skog', navn: '🌲 Skogsvei' },
+                { id: 'stier', navn: '🥾 Stier' },
+                { id: 'topper', navn: '⛰️ Topper' }
+            ]
         };
 
         const map = L.map('map').setView([startPos.lat, startPos.lon], 8);
@@ -77,7 +86,7 @@
                 const respons = await fetch('locations.json');
                 alleSteder = await respons.json();
                 setKategori('snø');
-            } catch (feil) { console.error(feil); }
+            } catch (feil) { console.error("Kunne ikke laste JSON:", feil); }
         }
 
         function setKategori(kat) {
@@ -94,8 +103,13 @@
         }
 
         function oppdaterGrensesnitt() {
-            document.getElementById('cat-snø').className = hovedKategori === 'snø' ? "flex-1 py-3 rounded-xl font-bold active-cat" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
-            document.getElementById('cat-vind').className = hovedKategori === 'vind' ? "flex-1 py-3 rounded-xl font-bold active-cat" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
+            // Oppdater hovedknapper
+            ['snø', 'vind', 'tur'].forEach(id => {
+                const btn = document.getElementById('cat-' + id);
+                if (btn) btn.className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
+            });
+
+            // Oppdater undermeny
             const subMenu = document.getElementById('sub-menu');
             subMenu.innerHTML = subValg[hovedKategori].map(item => `
                 <button onclick="setUnderKategori('${item.id}')" 
@@ -106,4 +120,63 @@
         }
 
         function getDistance(lat1, lon1, lat2, lon2) {
-            const R =
+            const R = 6371;
+            const dLat = (lat2-lat1)*Math.PI/180;
+            const dLon = (lon2-lon1)*Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        async function oppdaterOversikt() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse">Henter værdata...</div>';
+            
+            let liste = [];
+            // Filtrer steder som matcher valgt kategori
+            const filtrerteSteder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
+
+            if (filtrerteSteder.length === 0) {
+                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400">Ingen steder lagt til for denne kategorien ennå.</div>';
+                return;
+            }
+
+            for (const sted of filtrerteSteder) {
+                try {
+                    const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
+                    const data = await res.json();
+                    const info = data.properties.timeseries[0].data.instant.details;
+                    
+                    const km = getDistance(startPos.lat, startPos.lon, sted.lat, sted.lon);
+                    const min = Math.round(km * 2.2 + 5); 
+
+                    let score = 70; // Startscore
+                    if (hovedKategori === 'snø' && info.air_temperature > 0) score -= 40;
+                    if (hovedKategori === 'vind' && info.wind_speed < 4) score -= 40;
+                    
+                    liste.push({ ...sted, temp: info.air_temperature, vind: info.wind_speed, tid: min, score: score });
+                } catch (e) { console.error("Vær-feil for " + sted.navn); }
+            }
+
+            liste.sort((a, b) => b.score - a.score);
+            resultsDiv.innerHTML = '';
+liste.forEach(s => {
+                resultsDiv.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-blue-500 tracking-widest">${s.fylke} • ${s.omrade}</span>
+                            <h3 class="font-bold text-slate-900 text-xl leading-tight">${s.navn}</h3>
+                            <div class="flex gap-4 text-sm font-semibold text-slate-500 mt-2">
+                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="text-blue-600">🚗 ${s.tid} min</span>
+                            </div>
+                        </div>
+                        <div class="text-right ml-4">
+                            <div class="text-3xl font-black text-blue-600">${s.score}%</div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        lastInnData();
+    </script>
+</body>
+</html>
