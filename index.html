@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        #map { height: 350px; border-radius: 16px; border: 2px solid #e2e8f0; z-index: 1; }
+        #map { height: 350px; border-radius: 20px; border: 2px solid #e2e8f0; z-index: 1; }
         .active-cat { background-color: white !important; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); color: #1e40af !important; }
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
     </style>
 </head>
-<body class="bg-slate-50 font-sans min-h-screen">
+<body class="bg-slate-50 font-sans min-h-screen pb-12">
 
     <div id="omModal" class="modal flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
@@ -21,7 +21,6 @@
                 <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
                 <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
             </div>
-
             <div class="flex gap-4 mb-6">
                 <div class="flex-1 text-center">
                     <img src="Bilder/Knut%20Espen.jpg" alt="Knut Espen" class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm">
@@ -32,56 +31,47 @@
                     <p class="font-bold text-slate-800 text-sm">Steinar</p>
                 </div>
             </div>
-
             <div class="space-y-4">
-                <p class="text-slate-700 leading-relaxed font-medium">
-                    Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.
-                </p>
+                <p class="text-slate-700 leading-relaxed font-medium">Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.</p>
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-600">
                     <p class="font-bold text-blue-900 mb-1">Eierskap & Utvikling</p>
                     <p>Program eiet og utviklet av Knut Espen og Steinar.</p>
-                    <p class="mt-4 text-[11px] text-slate-400 italic">
-                        &copy; 2026 Alle rettigheter forbeholdt.<br>
-                        Versjon 1.2.0 - Sist oppdatert: 24. januar 2026
-                    </p>
+                    <p class="mt-4 text-[11px] text-slate-400 italic">&copy; 2026 Alle rettigheter forbeholdt.<br>Versjon 1.3.0 - Sist oppdatert: 25. jan 2026</p>
                 </div>
             </div>
-            <button onclick="lukkOm()" class="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-lg">Lukk</button>
+            <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg">Lukk</button>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto p-4 md:p-8">
         <header class="mb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
             <div class="text-center md:text-left">
-                <h1 class="text-4xl font-black text-blue-900">Hvor skal jeg reise?</h1>
-                <p class="text-slate-600 mt-2 font-semibold">Knut Espen og Steinars versjon (1.2.0)</p>
+                <h1 class="text-4xl font-black text-blue-900 tracking-tight">Hvor skal jeg reise?</h1>
+                <p class="text-slate-600 mt-2 font-semibold">Knut Espen og Steinars versjon (1.3.0)</p>
             </div>
-            <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2">
-                <span>ℹ️</span> Om programmet
-            </button>
+            <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2">ℹ️ Om programmet</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
                     <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
-                        Hvor starter du?
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span> Hvor starter du?
                     </h2>
                     <div id="map"></div>
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
                     <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
-                        Hva skal du gjøre?
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> Hva skal du gjøre?
                     </h2>
-                    <div class="flex gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
-                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
-                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
-                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
+                    <div class="flex flex-wrap gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
+                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 min-w-[80px] py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
+                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 min-w-[80px] py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
+                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 min-w-[80px] py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
+                        <button onclick="setKategori('sykkel')" id="cat-sykkel" class="flex-1 min-w-[80px] py-3 rounded-xl font-bold transition-all text-slate-500">🚲 Sykkel</button>
                     </div>
-                    <div id="sub-menu" class="grid grid-cols-2 gap-2"></div>
+                    <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
                 </div>
             </div>
 
@@ -101,14 +91,16 @@
 
         const subValg = {
             'snø': [{ id: 'langrenn', navn: '🎿 Langrenn' }, { id: 'alpint', navn: '🏂 Alpint' }],
-            'vind': [{ id: 'hav', navn: '🌊 Ved havet' }, { id: 'innsjø', navn: '🛶 Innsjø' }],
+            'vind': [{ id: 'hav', navn: '🌊 Hav' }, { id: 'innsjø', navn: '🛶 Innsjø' }],
             'tur': [
                 { id: 'kyst', navn: '🌊 Kyst' }, { id: 'skog', navn: '🌲 Skogsvei' },
-                { id: 'stier', navn: '🥾 Stier' }, { id: 'topper', navn: '⛰️ Topper' }
-            ]
+                { id: 'stier', navn: '🥾 Stier' }, { id: 'topper', navn: '⛰️ Topper' },
+                { id: 'byen', navn: '🏙️ I byen' }
+            ],
+            'sykkel': [{ id: 'landevei', navn: '🚴 Landevei' }, { id: 'terreng', navn: '🚵 Terreng' }]
         };
 
-        const map = L.map('map').setView([startPos.lat, startPos.lon], 8);
+        const map = L.map('map').setView([startPos.lat, startPos.lon], 10);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         marker = L.marker([startPos.lat, startPos.lon]).addTo(map);
 
@@ -158,14 +150,14 @@
         }
 
         function oppdaterGrensesnitt() {
-            ['snø', 'vind', 'tur'].forEach(id => {
+            ['snø', 'vind', 'tur', 'sykkel'].forEach(id => {
                 const btn = document.getElementById('cat-' + id);
-                if (btn) btn.className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat shadow-inner" : "flex-1 py-3 rounded-xl font-bold text-slate-500";
+                if (btn) btn.className = hovedKategori === id ? "flex-1 min-w-[80px] py-3 rounded-xl font-bold active-cat shadow-inner" : "flex-1 min-w-[80px] py-3 rounded-xl font-bold text-slate-500";
             });
             const subMenu = document.getElementById('sub-menu');
             subMenu.innerHTML = subValg[hovedKategori].map(item => `
                 <button onclick="setUnderKategori('${item.id}')" 
-                    class="py-3 rounded-xl font-bold border-2 transition-all ${underKategori === item.id ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-100 text-slate-400'}">
+                    class="py-3 px-2 rounded-xl font-bold border-2 text-xs sm:text-sm transition-all ${underKategori === item.id ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-100 text-slate-400'}">
                     ${item.navn}
                 </button>
             `).join('');
@@ -173,13 +165,14 @@
 
         async function oppdaterOversikt() {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 animate-pulse font-medium">Beregner anbefalinger...</div>';
+            resultsDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner beste forhold for deg...</div>';
             
             let liste = [];
+            const mnd = new Date().getMonth(); 
             const filtrerteSteder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
 
             if (filtrerteSteder.length === 0) {
-                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-dashed border-slate-300">Ingen steder registrert her.</div>';
+                resultsDiv.innerHTML = '<div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-dashed border-slate-300">Ingen steder registrert i denne kategorien.</div>';
                 return;
             }
 
@@ -187,54 +180,72 @@
                 try {
                     const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
                     const data = await res.json();
-                    
                     const forecast = data.properties.timeseries.slice(0, 3);
-                    const avgTemp = forecast.reduce((acc, t) => acc + t.data.instant.details.air_temperature, 0) / 3;
-                    const avgWind = forecast.reduce((acc, t) => acc + t.data.instant.details.wind_speed, 0) / 3;
+                    const det = forecast[0].data.instant.details;
+                    const probRegn = forecast[0].data.next_1_hours ? forecast[0].data.next_1_hours.details.probability_of_precipitation : 0;
                     
                     const km = getDistance(startPos.lat, startPos.lon, sted.lat, sted.lon);
                     const kjøreMin = Math.round(km * 2.2 + 5); 
 
                     let score = 100;
+                    let kommentar = "";
 
-                    if (hovedKategori === 'snø' && underKategori === 'langrenn') {
-                        if (avgTemp > 0) score -= (avgTemp * 25);
-                        else if (avgTemp < -8) score -= (Math.abs(avgTemp + 8) * 8);
-                        if (kjøreMin > 45) score -= (kjøreMin - 45) * 1.5;
-                        if (avgWind > 5) score -= (avgWind * 4);
+                    // --- AKTIVITETS-LOGIKK MOTORER ---
+                    
+                    if (hovedKategori === 'snø') {
+                        if (mnd > 3 && mnd < 10 && sted.navn !== "SNØ Lørenskog") { 
+                            score = 0; kommentar = "Utenfor sesong"; 
+                        } else {
+                            if (underKategori === 'langrenn') {
+                                if (det.air_temperature > 0) score -= 35;
+                                if (det.wind_speed > 4) score -= (det.wind_speed * 6);
+                                if (probRegn > 20) score -= 30;
+                            } else { // Alpint
+                                if (det.wind_speed > 12) { score -= 70; kommentar = "Fare for stengt heis"; }
+                                if (det.air_temperature > 3) score -= 20;
+                            }
+                        }
                     } 
-                    else if (hovedKategori === 'snø' && underKategori === 'alpint') {
-                        if (avgTemp > 2) score -= 40;
-                        if (avgWind > 12) score -= 60;
-                        if (kjøreMin > 120) score -= 20;
+                    else if (hovedKategori === 'sykkel') {
+                        if (mnd < 2 || mnd > 10) { score = 10; kommentar = "Vinterstengt?"; }
+                        if (underKategori === 'landevei') {
+                            if (det.wind_speed > 5) score -= (det.wind_speed * 8);
+                            if (probRegn > 5) score -= 60; // Landevei er kjedelig i regn
+                        } else { // Terreng
+                            if (probRegn > 30) score -= 40; // Gjørme
+                            if (det.wind_speed > 8) score -= 20;
+                        }
                     }
-                    else if (hovedKategori === 'vind') {
-                        if (avgWind < 6) score = 20;
-                        else if (avgWind >= 8 && avgWind <= 14) score = 100;
+                    else if (hovedKategori === 'tur') {
+                        if (probRegn > 40) score -= 50;
+                        if (underKategori === 'topper' && det.wind_speed > 10) score -= 40;
+                        if (underKategori === 'byen' && det.wind_speed > 12) score -= 20;
                     }
+
+                    // Felles Sol-bonus
+                    if (det.cloud_area_fraction < 20) score += 10;
+                    // Felles Reise-trekk
+                    score -= (kjøreMin / 5);
 
                     score = Math.max(0, Math.min(100, Math.round(score)));
 
-                    liste.push({ ...sted, temp: avgTemp.toFixed(1), vind: avgWind.toFixed(1), tid: kjøreMin, visTid: formaterTid(kjøreMin), score: score });
+                    liste.push({ ...sted, temp: det.air_temperature.toFixed(1), vind: det.wind_speed.toFixed(1), tid: kjøreMin, visTid: formaterTid(kjøreMin), score, kommentar });
                 } catch (e) { console.error(e); }
             }
 
-            // Sortering: Høy score først, deretter kortest tid
-            liste.sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score;
-                return a.tid - b.tid;
-            });
+            liste.sort((a, b) => b.score !== a.score ? b.score - a.score : a.tid - b.tid);
 
             resultsDiv.innerHTML = '';
             liste.forEach(s => {
                 resultsDiv.innerHTML += `
-                    <div class="bg-white p-5 rounded-2xl border ${s.score > 80 ? 'border-green-200 bg-green-50/20' : 'border-slate-100'} flex justify-between items-center shadow-sm hover:shadow-md transition-all">
+                    <div class="bg-white p-5 rounded-3xl border ${s.score > 80 ? 'border-green-200 bg-green-50/20' : 'border-slate-100'} flex justify-between items-center shadow-sm hover:shadow-md transition-all">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-blue-500 tracking-widest">${s.fylke} • ${s.omrade}</span>
                             <h3 class="font-bold text-slate-900 text-xl leading-tight">${s.navn}</h3>
                             <div class="flex gap-4 text-sm font-semibold text-slate-500 mt-2">
                                 <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="${s.tid > 60 ? 'text-orange-500' : 'text-blue-600'}">🚗 ${s.visTid}</span>
                             </div>
+                            ${s.kommentar ? `<p class="text-[11px] text-red-500 font-bold mt-1 uppercase italic">${s.kommentar}</p>` : ''}
                         </div>
                         <div class="text-right ml-4">
                             <div class="text-3xl font-black ${s.score > 70 ? 'text-green-600' : 'text-slate-400'}">${s.score}%</div>
