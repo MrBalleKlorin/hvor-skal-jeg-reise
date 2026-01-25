@@ -250,71 +250,58 @@
             document.getElementById('customTime').value = localISODate;
         }
 
-                function setKategori(k) {
-                    hovedKategori = k;
-                    underKategori = subValg[k][0].id;
-                    document.querySelectorAll('.cat-pill').forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    document.getElementById(`cat-${k}`).classList.add('active');
-                    oppdaterSubmeny();
-                    oppdaterOversikt();
-                }
-        
-                function oppdaterSubmeny() {
-                    const submeny = document.getElementById('sub-menu');
-                    submeny.innerHTML = subValg[hovedKategori].map(s => 
-                        `<button onclick="setUnderKategori('${s.id}')" id="sub-${s.id}" class="sub-btn ${underKategori === s.id ? 'active' : ''}">${s.navn}</button>`
-                    ).join('');
-                }
-        
-                function setUnderKategori(u) {
-                    underKategori = u;
-                    document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
-                    document.getElementById(`sub-${u}`).classList.add('active');
-                    oppdaterOversikt();
-                }
-        
-                function settHurtigTid(minutter) {
-                    avreiseTid = new Date(new Date().getTime() + minutter * 60000);
-                    oppdaterTidVisning();
-                    oppdaterOversikt();
-                }
-        
-                function justerTid(minutter) {
-                    avreiseTid = new Date(avreiseTid.getTime() + minutter * 60000);
-                    oppdaterTidVisning();
-                    oppdaterOversikt();
-                }
-        
-                function settEgendefinertTid() {
-                    const input = document.getElementById('customTime').value;
-                    if (input) {
-                        avreiseTid = new Date(input);
-                        oppdaterTidVisning();
-                        oppdaterOversikt();
-                    }
-                }
-        
-                function sokAdresse() {
-                    const adresse = document.getElementById('adresseSok').value;
-                    if (!adresse) return;
-                    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(adresse)}&format=json&limit=1`)
-                        .then(r => r.json())
-                        .then(data => {
-                            if (data.length > 0) {
-                                startPos = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
-                                marker.setLatLng([startPos.lat, startPos.lon]);
-                                map.setView([startPos.lat, startPos.lon], 12);
-                                oppdaterOversikt();
-                            }
-                        });
-                }
-        
-                // Initialisering
-                oppdaterSubmeny();
+        function setKategori(k) {
+            hovedKategori = k;
+            underKategori = subValg[k][0].id;
+            document.querySelectorAll('.cat-pill').forEach(b => b.classList.toggle('active', b.id === 'cat-'+k));
+            oppdaterSubMeny();
+            oppdaterOversikt();
+        }
+
+        function oppdaterSubMeny() {
+            document.getElementById('sub-menu').innerHTML = subValg[hovedKategori].map(item => `
+                <button onclick="underKategori='${item.id}'; oppdaterSubMeny(); oppdaterOversikt();" class="sub-btn ${underKategori === item.id ? 'active' : ''}">
+                    ${item.navn}
+                </button>
+            `).join('');
+        }
+
+        function settHurtigTid(m) { 
+            avreiseTid = m === 0 ? new Date() : new Date(new Date().getTime() + m * 60000); 
+            oppdaterTidVisning(); 
+            oppdaterOversikt(); 
+        }
+        function justerTid(m) { 
+            avreiseTid = new Date(avreiseTid.getTime() + m * 60000); 
+            oppdaterTidVisning(); 
+            oppdaterOversikt(); 
+        }
+        function settEgendefinertTid() { 
+            const valgt = new Date(document.getElementById('customTime').value);
+            if (!isNaN(valgt.getTime())) {
+                avreiseTid = valgt;
                 oppdaterTidVisning();
                 oppdaterOversikt();
-            </script>
-        </body>
-        </html>
+            }
+        }
+
+        function sokAdresse() {
+            const q = document.getElementById('adresseSok').value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}`).then(r => r.json()).then(data => {
+                if (data[0]) {
+                    startPos = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+                    marker.setLatLng([startPos.lat, startPos.lon]);
+                    map.setView([startPos.lat, startPos.lon], 12);
+                    oppdaterOversikt();
+                }
+            });
+        }
+
+        fetch('locations.json').then(r => r.json()).then(data => { 
+            alleSteder = data; 
+            oppdaterTidVisning();
+            setKategori('tur'); 
+        });
+    </script>
+</body>
+</html>
