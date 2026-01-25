@@ -16,133 +16,85 @@
 <body class="bg-slate-50 font-sans min-h-screen pb-12">
 
     <div id="omModal" class="modal items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
+        <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl">
             <div class="flex justify-between items-start mb-6">
                 <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
                 <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
             </div>
-            
             <div class="flex gap-4 mb-6">
                 <div class="flex-1 text-center">
-                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
-                        <img src="Bilder/Knut%20Espen.jpg" alt="Knut Espen Øvreberg" class="w-full h-40 object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl">KEØ</div>
-                    </div>
+                    <img src="Bilder/Knut%20Espen.jpg" class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2" onerror="this.src='https://via.placeholder.com/150?text=KEØ'">
                     <p class="font-bold text-slate-800 text-xs">Knut Espen Øvreberg</p>
                 </div>
                 <div class="flex-1 text-center">
-                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
-                        <img src="Bilder/Steinar.jpg" alt="Steinar Bjørnerud" class="w-full h-40 object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl">SB</div>
-                    </div>
+                    <img src="Bilder/Steinar.jpg" class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2" onerror="this.src='https://via.placeholder.com/150?text=SB'">
                     <p class="font-bold text-slate-800 text-xs">Steinar Bjørnerud</p>
                 </div>
             </div>
-
-            <div class="space-y-4 text-sm text-slate-700">
-                <p>Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse.</p>
-                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p class="font-bold text-blue-900 mb-1">Eierskap & Utvikling</p>
-                    <p>Utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
-                    <p class="mt-4 text-[10px] text-slate-400 italic">&copy; 2026 Versjon 1.8.0</p>
-                </div>
-            </div>
-            <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700">Lukk</button>
+            <button onclick="lukkOm()" class="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl">Lukk</button>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-4xl font-black text-blue-900 tracking-tight">Hvor skal jeg reise?</h1>
-                <p class="text-slate-600 mt-1 font-semibold text-sm">Versjon 1.8.0 • KEØ & SB</p>
-            </div>
-            <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm">ℹ️ Om programmet</button>
+        <header class="mb-8 flex justify-between items-center">
+            <h1 class="text-3xl font-black text-blue-900">Hvor skal jeg reise?</h1>
+            <button onclick="aapneOm()" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold">ℹ️ Om</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span> Mitt startpunkt
-                    </h2>
-                    <div class="flex flex-col gap-3 mb-4">
-                        <div class="flex gap-2">
-                            <button onclick="finnMinPosisjon()" class="flex-1 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all">📍 Min posisjon</button>
-                            <div class="flex-[2] flex gap-1">
-                                <input type="text" id="adresseSok" placeholder="Søk adresse..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-blue-400">
-                                <button onclick="sokAdresse()" class="px-4 py-3 bg-slate-800 text-white rounded-xl text-xs font-bold">Søk</button>
-                            </div>
-                        </div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span> Mitt startpunkt</h2>
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="finnMinPosisjon()" class="flex-1 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold">📍 Posisjon</button>
+                        <input type="text" id="adresseSok" placeholder="Søk adresse..." class="flex-[2] px-4 py-3 bg-slate-50 border rounded-xl text-xs outline-none">
+                        <button onclick="sokAdresse()" class="px-4 py-3 bg-slate-800 text-white rounded-xl text-xs font-bold">Søk</button>
                     </div>
                     <div id="map"></div>
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> Hva vil du gjøre?
-                    </h2>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> Hva vil du gjøre?</h2>
                     <div class="flex flex-wrap gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
-                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
-                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
-                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
-                        <button onclick="setKategori('sykkel')" id="cat-sykkel" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🚲 Sykkel</button>
+                        <button onclick="setKategori('sol')" id="cat-sol" class="flex-1 py-3 rounded-xl font-bold text-slate-500">☀️ Sol</button>
+                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold text-slate-500">❄️ Snø</button>
+                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold text-slate-500">💨 Vind</button>
+                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold text-slate-500">🥾 Tur</button>
+                        <button onclick="setKategori('sykkel')" id="cat-sykkel" class="flex-1 py-3 rounded-xl font-bold text-slate-500">🚲 Sykkel</button>
                     </div>
-                    <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                    <div id="sub-menu" class="grid grid-cols-2 gap-2"></div>
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> Når skal du reise?
-                    </h2>
-                    <div class="grid grid-cols-5 gap-2 mb-4">
-                        <button onclick="settHurtigTid(0)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">NÅ</button>
-                        <button onclick="settHurtigTid(15)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">15 min</button>
-                        <button onclick="settHurtigTid(30)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">30 min</button>
-                        <button onclick="settHurtigTid(60)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">1 time</button>
-                        <button onclick="settHurtigTid(120)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">2 timer</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
-                            <span class="text-[10px] font-bold px-2">TIME</span>
-                            <div class="flex gap-1">
-                                <button onclick="justerTid(-60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">-</button>
-                                <button onclick="justerTid(60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
-                            <span class="text-[10px] font-bold px-2">6 TIMER</span>
-                            <div class="flex gap-1">
-                                <button onclick="justerTid(-360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">-</button>
-                                <button onclick="justerTid(360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">+</button>
-                            </div>
-                        </div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> Når skal du reise?</h2>
+                    <div class="grid grid-cols-5 gap-1 mb-4">
+                        <button onclick="settHurtigTid(0)" class="py-2 bg-slate-100 rounded-lg text-[9px] font-bold">NÅ</button>
+                        <button onclick="settHurtigTid(15)" class="py-2 bg-slate-100 rounded-lg text-[9px] font-bold">15m</button>
+                        <button onclick="settHurtigTid(60)" class="py-2 bg-slate-100 rounded-lg text-[9px] font-bold">1t</button>
+                        <button onclick="justerTid(60)" class="py-2 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-bold">+1t</button>
+                        <button onclick="justerTid(360)" class="py-2 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-bold">+6t</button>
                     </div>
                     <div class="p-3 bg-blue-50 rounded-2xl border border-blue-100 flex justify-between items-center">
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-blue-400 uppercase">Angitt avreise:</span>
-                            <span id="visningsTid" class="text-sm font-bold text-blue-800">Laster...</span>
+                            <span class="text-[9px] font-black text-blue-400 uppercase">Angitt avreise:</span>
+                            <span id="visningsTid" class="text-xs font-bold text-blue-800">Laster...</span>
                         </div>
-                        <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()" class="bg-white p-1 rounded-lg text-[10px] font-bold text-blue-700 outline-none border border-blue-200">
+                        <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()" class="bg-white p-1 rounded-lg text-[9px] font-bold text-blue-700 outline-none border border-blue-200">
                     </div>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <h2 class="text-2xl font-bold px-2 text-slate-800 flex justify-between items-center">
-                    <span>🎯 Anbefalinger</span>
-                    <span id="resultCount" class="text-sm font-normal text-slate-400"></span>
-                </h2>
                 <div id="results" class="grid grid-cols-1 gap-3"></div>
-                <button id="loadMore" onclick="visFlere()" class="hidden w-full py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition-all">Vis flere steder (+5)</button>
+                <button id="loadMore" onclick="visFlere()" class="hidden w-full py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-slate-600">Vis flere steder</button>
             </div>
         </div>
     </div>
 
     <script>
         let startPos = { lat: 59.949, lon: 10.817 };
-        let hovedKategori = 'snø';
-        let underKategori = 'langrenn';
+        let hovedKategori = 'sol';
+        let underKategori = 'solsok';
         let avreiseTid = new Date();
         let alleSteder = [];
         let filtrerteResultater = [];
@@ -150,22 +102,21 @@
         let marker;
 
         const subValg = {
+            'sol': [{ id: 'solsok', navn: '☀️ Finn sola og godværet' }],
             'snø': [{ id: 'langrenn', navn: '🎿 Langrenn' }, { id: 'alpint', navn: '🏂 Alpint' }],
             'vind': [{ id: 'hav', navn: '🌊 Hav' }, { id: 'innsjø', navn: '🛶 Innsjø' }],
-            'tur': [{ id: 'kyst', navn: '🌊 Kyst' }, { id: 'skog', navn: '🌲 Skogsvei' }, { id: 'stier', navn: '🥾 Stier' }, { id: 'topper', navn: '⛰️ Topper' }, { id: 'byen', navn: '🏙️ I byen' }],
+            'tur': [{ id: 'kyst', navn: '🌊 Kyst' }, { id: 'skog', navn: '🌲 Skog' }, { id: 'stier', navn: '🥾 Stier' }, { id: 'topper', navn: '⛰️ Topper' }],
             'sykkel': [{ id: 'landevei', navn: '🚴 Landevei' }, { id: 'terreng', navn: '🚵 Terreng' }]
         };
 
         const map = L.map('map', { tap: false }).setView([startPos.lat, startPos.lon], 10);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         marker = L.marker([startPos.lat, startPos.lon], { draggable: true }).addTo(map);
-
         marker.on('dragend', () => settNyStartPosisjon(marker.getLatLng().lat, marker.getLatLng().lng, false));
         map.on('click', (e) => settNyStartPosisjon(e.latlng.lat, e.latlng.lng, false));
 
         function oppdaterTidVisning() {
-            const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('visningsTid').innerText = avreiseTid.toLocaleString('no-NO', options);
+            document.getElementById('visningsTid').innerText = avreiseTid.toLocaleString('no-NO', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
         }
 
         function settHurtigTid(m) { avreiseTid = new Date(new Date().getTime() + m * 60000); oppdaterTidVisning(); oppdaterOversikt(); }
@@ -173,13 +124,11 @@
         function settEgendefinertTid() { avreiseTid = new Date(document.getElementById('customTime').value); oppdaterTidVisning(); oppdaterOversikt(); }
 
         function settNyStartPosisjon(lat, lon, flytt) {
-            startPos = { lat, lon };
-            marker.setLatLng([lat, lon]);
+            startPos = { lat, lon }; marker.setLatLng([lat, lon]);
             if (flytt) map.setView([lat, lon], 12);
             oppdaterOversikt();
         }
 
-        function finnMinPosisjon() { navigator.geolocation.getCurrentPosition((pos) => settNyStartPosisjon(pos.coords.latitude, pos.coords.longitude, true)); }
         async function sokAdresse() {
             const q = document.getElementById('adresseSok').value;
             const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}`);
@@ -187,92 +136,56 @@
             if (data[0]) settNyStartPosisjon(parseFloat(data[0].lat), parseFloat(data[0].lon), true);
         }
 
-        // --- BEREGNING AV EFFEKTIV KULDE (WIND CHILL) ---
-        function beregnEffektivKulde(temp, vindKmH) {
-            if (temp > 10 || vindKmH < 4.8) return temp;
-            return 13.12 + (0.6215 * temp) - (11.37 * Math.pow(vindKmH, 0.16)) + (0.3965 * temp * Math.pow(vindKmH, 0.16));
-        }
-
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2-lat1)*Math.PI/180;
-            const dLon = (lon2-lon1)*Math.PI/180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        }
+        function beregnEffektivKulde(t, v) { return t > 10 || v < 4.8 ? t : 13.12 + (0.6215 * t) - (11.37 * Math.pow(v, 0.16)) + (0.3965 * t * Math.pow(v, 0.16)); }
 
         async function oppdaterOversikt() {
             const resDiv = document.getElementById('results');
-            resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Analyserer vær og effektiv kulde...</div>';
-            vistAntall = 10;
-            filtrerteResultater = [];
-            
-            const steder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
+            resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner beste lokasjon...</div>';
+            vistAntall = 10; filtrerteResultater = [];
+
+            // NÅ: Filtrerer kun basert på JSON-data
+            let steder = alleSteder.filter(s => {
+                if(hovedKategori === 'sol') return true; 
+                return s.hovedkategori === hovedKategori && s.underkategori === underKategori;
+            });
 
             for (const sted of steder) {
                 try {
-                    const km = getDistance(startPos.lat, startPos.lon, sted.lat, sted.lon);
+                    const R = 6371;
+                    const dLat = (sted.lat-startPos.lat)*Math.PI/180;
+                    const dLon = (sted.lon-startPos.lon)*Math.PI/180;
+                    const a = Math.sin(dLat/2)**2 + Math.cos(startPos.lat*Math.PI/180)*Math.cos(sted.lat*Math.PI/180)*Math.sin(dLon/2)**2;
+                    const km = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
                     const tidMin = Math.round(km * 2 + 5);
                     const ankomst = new Date(avreiseTid.getTime() + tidMin * 60000);
-                    
+
                     const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
                     const data = await res.json();
                     const varsel = data.properties.timeseries.reduce((p, c) => Math.abs(new Date(c.time)-ankomst) < Math.abs(new Date(p.time)-ankomst) ? c : p);
                     
                     const t = varsel.data.instant.details.air_temperature;
                     const vMs = varsel.data.instant.details.wind_speed;
-                    const vKmH = vMs * 3.6;
-                    const effT = Math.round(beregnEffektivKulde(t, vKmH));
-                    
-                    let warnings = [];
-                    let score = 100;
+                    const effT = Math.round(beregnEffektivKulde(t, vMs * 3.6));
+                    const symbol = varsel.data.next_1_hours ? varsel.data.next_1_hours.summary.symbol_code : "clearsky_day";
 
-                    // --- NY SIKKERHETSLOGIKK ---
-                    
-                    // Felles for Snø og Tur (-25 grense)
-                    if ((hovedKategori === 'snø' || hovedKategori === 'tur') && effT <= -25) {
-                        warnings.push("⚠️ Advarsel om forfrysning!");
-                        score -= 50;
+                    let score = 100; let warnings = [];
+
+                    if (hovedKategori === 'sol') {
+                        if (symbol.includes('sun') || symbol.includes('clear')) score = 100;
+                        else if (symbol.includes('fair')) score = 70;
+                        else score = 20;
+                        score -= (tidMin / 15);
+                    } else {
+                        // ADVARSEL-LOGIKK (Effektiv kulde)
+                        if (effT <= -25) { warnings.push("⚠️ Advarsel om alvorlig forfrysning!"); score -= 60; }
+                        else if (effT <= -15) { warnings.push("⚠️ Advarsel om forfrysning!"); score -= 30; }
+
+                        if (hovedKategori === 'sykkel' && effT < 0) warnings.push("⚠️ Is/snø på veien! Piggdekk anbefales.");
+                        if (hovedKategori === 'tur' && underKategori === 'topper' && t < 0) warnings.push("⛰️ Klatreutstyr påkrevd ved minusgrader!");
+                        if (hovedKategori === 'vind' && t <= 0) warnings.push("❄️ Fare for ising på vannet!");
                     }
 
-                    // Sykkel Spesifikk
-                    if (hovedKategori === 'sykkel') {
-                        if (effT < 0) {
-                            warnings.push("⚠️ Advarsel om is og sne på veien! Du bør ha piggdekk og kle deg ekstra godt.");
-                            score -= 40;
-                        }
-                        if (effT <= -15) {
-                            warnings.push("❗ Advarsel om fare for forfrysning!");
-                            score -= 40;
-                        }
-                    }
-
-                    // Vind (Hav/Innsjø)
-                    if (hovedKategori === 'vind') {
-                        if (t <= 0) {
-                            warnings.push("❄️ Advarsel: Farlig pga kulde og isforhold!");
-                            score -= 30;
-                        }
-                        if (effT <= -15) {
-                            warnings.push("❗ Advarsel om fare for forfrysning!");
-                            score -= 40;
-                        }
-                    }
-
-                    // Tur (Spesifikk logikk)
-                    if (hovedKategori === 'tur') {
-                        if (t <= 0) warnings.push("⛸️ Advarsel om glatt føre pga snø og is.");
-                        if (effT <= -15 && effT > -25) warnings.push("⚠️ Advarsel om forfrysning!");
-                        if (effT <= -25) warnings.push("🚨 Advarsel om ALVORLIG forfrysning!");
-                        
-                        if (underKategori === 'topper' && t < 0) {
-                            warnings.push("⛰️ Om du ikke er en profesjonell klatrer, hold deg hjemme!");
-                            score -= 60;
-                        }
-                    }
-
-                    score = Math.max(0, Math.min(100, Math.round(score - (tidMin/10))));
-                    filtrerteResultater.push({ ...sted, t, vMs, effT, tid: tidMin, score, ankomst, warnings });
+                    filtrerteResultater.push({ ...sted, t, vMs, effT, tid: tidMin, score: Math.max(0, Math.round(score)), ankomst, warnings, symbol });
                 } catch (e) { console.error(e); }
             }
             filtrerteResultater.sort((a, b) => b.score - a.score);
@@ -283,25 +196,25 @@
             const resDiv = document.getElementById('results');
             const porsjon = filtrerteResultater.slice(0, vistAntall);
             document.getElementById('loadMore').classList.toggle('hidden', vistAntall >= filtrerteResultater.length);
-
             resDiv.innerHTML = porsjon.map(s => `
                 <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-blue-500">${s.fylke} • Fremme ${s.ankomst.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <span class="text-[9px] uppercase font-bold text-blue-500">${s.fylke} • ${s.tid} min reise</span>
                             <h3 class="font-bold text-slate-900 text-lg">${s.navn}</h3>
+                            <div class="flex gap-2 my-2">
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded">🌡️ ${Math.round(s.t)}°C (🥶 ${s.effT}°)</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded">💨 ${s.vMs} m/s</span>
+                            </div>
                         </div>
-                        <div class="text-3xl font-black ${s.score > 60 ? 'text-green-600' : 'text-red-500'}">${s.score}%</div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black ${s.score > 60 ? 'text-green-600' : 'text-orange-500'}">${s.score}%</div>
+                            <img src="https://api.met.no/weatherapi/weathericon/2.0/static?symbol=${s.symbol}&content_type=image/png" class="w-10 h-10 ml-auto" onerror="this.style.display='none'">
+                        </div>
                     </div>
-                    <div class="flex flex-wrap gap-3 text-xs font-semibold text-slate-500 mb-3">
-                        <span class="bg-slate-100 px-2 py-1 rounded">🌡️ ${Math.round(s.t)}°C</span>
-                        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded">🥶 Effektiv: ${s.effT}°C</span>
-                        <span class="bg-slate-100 px-2 py-1 rounded">💨 ${s.vMs} m/s</span>
-                        <span class="bg-slate-100 px-2 py-1 rounded">🚗 ${s.tid} min</span>
-                    </div>
-                    ${s.warnings.map(w => `<div class="mt-1 p-2 bg-red-50 text-red-800 text-[10px] font-bold rounded-lg border border-red-100">${w}</div>`).join('')}
+                    ${s.warnings.map(w => `<div class="p-2 bg-red-50 text-red-800 text-[10px] font-bold rounded-lg border border-red-100 mt-2">${w}</div>`).join('')}
                 </div>
-            `).join('') || '<div class="text-center p-8 text-slate-400">Ingen steder funnet.</div>';
+            `).join('') || '<div class="text-center p-8 text-slate-400">Ingen treff. Sjekk filteret.</div>';
         }
 
         function visFlere() { vistAntall += 5; tegnResultater(); }
@@ -309,15 +222,21 @@
         function setUnderKategori(s) { underKategori = s; oppdaterGrensesnitt(); oppdaterOversikt(); }
 
         function oppdaterGrensesnitt() {
-            ['snø', 'vind', 'tur', 'sykkel'].forEach(id => document.getElementById('cat-'+id).className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat shadow-inner" : "flex-1 py-3 rounded-xl font-bold text-slate-500");
-            document.getElementById('sub-menu').innerHTML = subValg[hovedKategori].map(item => `<button onclick="setUnderKategori('${item.id}')" class="py-3 px-2 rounded-xl font-bold border-2 text-xs transition-all ${underKategori === item.id ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-100 text-slate-400'}">${item.navn}</button>`).join('');
+            Object.keys(subValg).forEach(id => document.getElementById('cat-'+id).className = hovedKategori === id ? "flex-1 py-3 rounded-xl font-bold active-cat shadow-inner text-blue-600" : "flex-1 py-3 rounded-xl font-bold text-slate-400");
+            document.getElementById('sub-menu').innerHTML = subValg[hovedKategori].map(item => `<button onclick="setUnderKategori('${item.id}')" class="py-2 px-2 rounded-xl font-bold border-2 text-[10px] ${underKategori === item.id ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-100 text-slate-400'}">${item.navn}</button>`).join('');
         }
 
         function aapneOm() { document.getElementById('omModal').style.display = 'flex'; }
         function lukkOm() { document.getElementById('omModal').style.display = 'none'; }
 
         oppdaterTidVisning();
-        fetch('locations.json').then(r => r.json()).then(data => { alleSteder = data; setKategori('snø'); });
+        fetch('locations.json').then(r => r.json()).then(data => { 
+            alleSteder = data; 
+            setKategori('sol'); 
+        }).catch(e => {
+            console.error("Kunne ikke laste JSON. Sjekk at locations.json ligger i samme mappe.", e);
+            resDiv.innerHTML = '<div class="p-8 text-red-500 font-bold">Feil: Kunne ikke laste locations.json</div>';
+        });
     </script>
 </body>
 </html>
