@@ -21,17 +21,33 @@
                 <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
                 <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
             </div>
-            <div class="flex gap-4 mb-6 text-center">
-                <div class="flex-1">
-                    <div class="w-full h-32 bg-slate-200 rounded-2xl mb-2 flex items-center justify-center text-blue-600 font-bold">KEØ</div>
-                    <p class="font-bold text-xs text-slate-800">Knut Espen Øvreberg</p>
+            
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 text-center">
+                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
+                        <img src="Bilder/Knut%20Espen.jpg" alt="Knut Espen Øvreberg" class="w-full h-40 object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl">KEØ</div>
+                    </div>
+                    <p class="font-bold text-slate-800 text-xs">Knut Espen Øvreberg</p>
                 </div>
-                <div class="flex-1">
-                    <div class="w-full h-32 bg-slate-200 rounded-2xl mb-2 flex items-center justify-center text-blue-600 font-bold">SB</div>
-                    <p class="font-bold text-xs text-slate-800">Steinar Bjørnerud</p>
+                <div class="flex-1 text-center">
+                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
+                        <img src="Bilder/Steinar.jpg" alt="Steinar Bjørnerud" class="w-full h-40 object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl">SB</div>
+                    </div>
+                    <p class="font-bold text-slate-800 text-xs">Steinar Bjørnerud</p>
                 </div>
             </div>
-            <button onclick="lukkOm()" class="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700">Lukk</button>
+
+            <div class="space-y-4 text-sm text-slate-700">
+                <p>Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse.</p>
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <p class="font-bold text-blue-900 mb-1">Eierskap & Utvikling</p>
+                    <p>Utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
+                    <p class="mt-4 text-[10px] text-slate-400 italic">&copy; 2026 Versjon 1.8.0</p>
+                </div>
+            </div>
+            <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700">Lukk</button>
         </div>
     </div>
 
@@ -39,7 +55,7 @@
         <header class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-4xl font-black text-blue-900 tracking-tight">Hvor skal jeg reise?</h1>
-                <p class="text-slate-600 mt-1 font-semibold text-sm">Versjon 1.7.0 • KEØ & SB</p>
+                <p class="text-slate-600 mt-1 font-semibold text-sm">Versjon 1.8.0 • KEØ & SB</p>
             </div>
             <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm">ℹ️ Om programmet</button>
         </header>
@@ -64,7 +80,20 @@
 
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
                     <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> Når skal du reise?
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> Hva vil du gjøre?
+                    </h2>
+                    <div class="flex flex-wrap gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
+                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
+                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
+                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
+                        <button onclick="setKategori('sykkel')" id="cat-sykkel" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🚲 Sykkel</button>
+                    </div>
+                    <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> Når skal du reise?
                     </h2>
                     <div class="grid grid-cols-5 gap-2 mb-4">
                         <button onclick="settHurtigTid(0)" class="py-2 bg-slate-100 rounded-lg text-[10px] font-bold">NÅ</button>
@@ -77,44 +106,35 @@
                         <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
                             <span class="text-[10px] font-bold px-2">TIME</span>
                             <div class="flex gap-1">
-                                <button onclick="justerTid(-60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold">-</button>
-                                <button onclick="justerTid(60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold">+</button>
+                                <button onclick="justerTid(-60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">-</button>
+                                <button onclick="justerTid(60)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">+</button>
                             </div>
                         </div>
                         <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
                             <span class="text-[10px] font-bold px-2">6 TIMER</span>
                             <div class="flex gap-1">
-                                <button onclick="justerTid(-360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold">-</button>
-                                <button onclick="justerTid(360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold">+</button>
+                                <button onclick="justerTid(-360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">-</button>
+                                <button onclick="justerTid(360)" class="w-8 h-8 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col p-3 bg-blue-50 rounded-2xl border border-blue-100">
-                        <label class="text-[10px] font-black text-blue-400 uppercase">Angitt avreise:</label>
-                        <div class="flex justify-between items-center">
+                    <div class="p-3 bg-blue-50 rounded-2xl border border-blue-100 flex justify-between items-center">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-blue-400 uppercase">Angitt avreise:</span>
                             <span id="visningsTid" class="text-sm font-bold text-blue-800">Laster...</span>
-                            <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()" class="bg-transparent text-xs font-bold text-blue-700 outline-none">
                         </div>
+                        <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()" class="bg-white p-1 rounded-lg text-[10px] font-bold text-blue-700 outline-none border border-blue-200">
                     </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> Aktivitet
-                    </h2>
-                    <div class="flex flex-wrap gap-2 mb-4 p-1 bg-slate-100 rounded-2xl">
-                        <button onclick="setKategori('snø')" id="cat-snø" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">❄️ Snø</button>
-                        <button onclick="setKategori('vind')" id="cat-vind" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">💨 Vind</button>
-                        <button onclick="setKategori('tur')" id="cat-tur" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🥾 Tur</button>
-                        <button onclick="setKategori('sykkel')" id="cat-sykkel" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500">🚲 Sykkel</button>
-                    </div>
-                    <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
                 </div>
             </div>
 
             <div class="space-y-4">
+                <h2 class="text-2xl font-bold px-2 text-slate-800 flex justify-between items-center">
+                    <span>🎯 Anbefalinger</span>
+                    <span id="resultCount" class="text-sm font-normal text-slate-400"></span>
+                </h2>
                 <div id="results" class="grid grid-cols-1 gap-3"></div>
-                <button id="loadMore" onclick="visFlere()" class="hidden w-full py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-slate-600">Vis flere steder (+5)</button>
+                <button id="loadMore" onclick="visFlere()" class="hidden w-full py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition-all">Vis flere steder (+5)</button>
             </div>
         </div>
     </div>
@@ -140,7 +160,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         marker = L.marker([startPos.lat, startPos.lon], { draggable: true }).addTo(map);
 
-        marker.on('dragend', (e) => settNyStartPosisjon(marker.getLatLng().lat, marker.getLatLng().lng, false));
+        marker.on('dragend', () => settNyStartPosisjon(marker.getLatLng().lat, marker.getLatLng().lng, false));
         map.on('click', (e) => settNyStartPosisjon(e.latlng.lat, e.latlng.lng, false));
 
         function oppdaterTidVisning() {
@@ -150,6 +170,7 @@
 
         function settHurtigTid(m) { avreiseTid = new Date(new Date().getTime() + m * 60000); oppdaterTidVisning(); oppdaterOversikt(); }
         function justerTid(m) { avreiseTid = new Date(avreiseTid.getTime() + m * 60000); oppdaterTidVisning(); oppdaterOversikt(); }
+        function settEgendefinertTid() { avreiseTid = new Date(document.getElementById('customTime').value); oppdaterTidVisning(); oppdaterOversikt(); }
 
         function settNyStartPosisjon(lat, lon, flytt) {
             startPos = { lat, lon };
@@ -166,6 +187,12 @@
             if (data[0]) settNyStartPosisjon(parseFloat(data[0].lat), parseFloat(data[0].lon), true);
         }
 
+        // --- BEREGNING AV EFFEKTIV KULDE (WIND CHILL) ---
+        function beregnEffektivKulde(temp, vindKmH) {
+            if (temp > 10 || vindKmH < 4.8) return temp;
+            return 13.12 + (0.6215 * temp) - (11.37 * Math.pow(vindKmH, 0.16)) + (0.3965 * temp * Math.pow(vindKmH, 0.16));
+        }
+
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2-lat1)*Math.PI/180;
@@ -176,12 +203,11 @@
 
         async function oppdaterOversikt() {
             const resDiv = document.getElementById('results');
-            resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner forhold og risiko...</div>';
+            resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Analyserer vær og effektiv kulde...</div>';
             vistAntall = 10;
             filtrerteResultater = [];
             
             const steder = alleSteder.filter(s => s.hovedkategori === hovedKategori && s.underkategori === underKategori);
-            const mnd = avreiseTid.getMonth(); // 0 = jan, 11 = des
 
             for (const sted of steder) {
                 try {
@@ -192,30 +218,61 @@
                     const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
                     const data = await res.json();
                     const varsel = data.properties.timeseries.reduce((p, c) => Math.abs(new Date(c.time)-ankomst) < Math.abs(new Date(p.time)-ankomst) ? c : p);
-                    const d = varsel.data.instant.details;
                     
-                    let score = 100;
+                    const t = varsel.data.instant.details.air_temperature;
+                    const vMs = varsel.data.instant.details.wind_speed;
+                    const vKmH = vMs * 3.6;
+                    const effT = Math.round(beregnEffektivKulde(t, vKmH));
+                    
                     let warnings = [];
+                    let score = 100;
 
-                    // --- RISIKO-MOTOR ---
-                    if (hovedKategori === 'sykkel' && (mnd < 3 || mnd > 9)) {
-                        score -= 60;
-                        warnings.push("⚠️ VINTER: Is og snø på veiene. Krever piggdekk!");
-                    }
-                    if (hovedKategori === 'tur' && (underKategori === 'topper' || underKategori === 'stier') && (mnd < 4 || mnd > 9)) {
+                    // --- NY SIKKERHETSLOGIKK ---
+                    
+                    // Felles for Snø og Tur (-25 grense)
+                    if ((hovedKategori === 'snø' || hovedKategori === 'tur') && effT <= -25) {
+                        warnings.push("⚠️ Advarsel om forfrysning!");
                         score -= 50;
-                        warnings.push("⚠️ KREVENDE: Snø og is i høyden. Brodder anbefales!");
                     }
-                    if (d.air_temperature < 1 && d.air_temperature > -2) {
-                        warnings.push("❗ FARE: Fare for underkjølt regn og ekstremt glatte partier.");
+
+                    // Sykkel Spesifikk
+                    if (hovedKategori === 'sykkel') {
+                        if (effT < 0) {
+                            warnings.push("⚠️ Advarsel om is og sne på veien! Du bør ha piggdekk og kle deg ekstra godt.");
+                            score -= 40;
+                        }
+                        if (effT <= -15) {
+                            warnings.push("❗ Advarsel om fare for forfrysning!");
+                            score -= 40;
+                        }
                     }
-                    if (d.wind_speed > 12) {
-                        score -= 40;
-                        warnings.push("🚩 VIND: Sterk vind kan gjøre turen ubehagelig.");
+
+                    // Vind (Hav/Innsjø)
+                    if (hovedKategori === 'vind') {
+                        if (t <= 0) {
+                            warnings.push("❄️ Advarsel: Farlig pga kulde og isforhold!");
+                            score -= 30;
+                        }
+                        if (effT <= -15) {
+                            warnings.push("❗ Advarsel om fare for forfrysning!");
+                            score -= 40;
+                        }
+                    }
+
+                    // Tur (Spesifikk logikk)
+                    if (hovedKategori === 'tur') {
+                        if (t <= 0) warnings.push("⛸️ Advarsel om glatt føre pga snø og is.");
+                        if (effT <= -15 && effT > -25) warnings.push("⚠️ Advarsel om forfrysning!");
+                        if (effT <= -25) warnings.push("🚨 Advarsel om ALVORLIG forfrysning!");
+                        
+                        if (underKategori === 'topper' && t < 0) {
+                            warnings.push("⛰️ Om du ikke er en profesjonell klatrer, hold deg hjemme!");
+                            score -= 60;
+                        }
                     }
 
                     score = Math.max(0, Math.min(100, Math.round(score - (tidMin/10))));
-                    filtrerteResultater.push({ ...sted, temp: d.air_temperature, vind: d.wind_speed, tid: tidMin, score, ankomst, warnings });
+                    filtrerteResultater.push({ ...sted, t, vMs, effT, tid: tidMin, score, ankomst, warnings });
                 } catch (e) { console.error(e); }
             }
             filtrerteResultater.sort((a, b) => b.score - a.score);
@@ -234,14 +291,17 @@
                             <span class="text-[10px] uppercase font-bold text-blue-500">${s.fylke} • Fremme ${s.ankomst.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
                             <h3 class="font-bold text-slate-900 text-lg">${s.navn}</h3>
                         </div>
-                        <div class="text-3xl font-black ${s.score > 60 ? 'text-green-600' : 'text-orange-500'}">${s.score}%</div>
+                        <div class="text-3xl font-black ${s.score > 60 ? 'text-green-600' : 'text-red-500'}">${s.score}%</div>
                     </div>
-                    <div class="flex gap-4 text-xs font-semibold text-slate-500 mb-3">
-                        <span>🌡️ ${Math.round(s.temp)}°C</span> <span>💨 ${s.vind} m/s</span> <span>🚗 ${s.tid} min</span>
+                    <div class="flex flex-wrap gap-3 text-xs font-semibold text-slate-500 mb-3">
+                        <span class="bg-slate-100 px-2 py-1 rounded">🌡️ ${Math.round(s.t)}°C</span>
+                        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded">🥶 Effektiv: ${s.effT}°C</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">💨 ${s.vMs} m/s</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">🚗 ${s.tid} min</span>
                     </div>
-                    ${s.warnings.map(w => `<div class="mt-1 p-2 bg-amber-50 text-amber-800 text-[10px] font-bold rounded-lg border border-amber-100">${w}</div>`).join('')}
+                    ${s.warnings.map(w => `<div class="mt-1 p-2 bg-red-50 text-red-800 text-[10px] font-bold rounded-lg border border-red-100">${w}</div>`).join('')}
                 </div>
-            `).join('');
+            `).join('') || '<div class="text-center p-8 text-slate-400">Ingen steder funnet.</div>';
         }
 
         function visFlere() { vistAntall += 5; tegnResultater(); }
