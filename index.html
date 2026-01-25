@@ -34,7 +34,7 @@
             <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
                 <p>Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse.</p>
                 <p>Utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
-                <p class="text-[10px] text-slate-400 italic mt-4">&copy; 2026 Versjon 1.9.4</p>
+                <p class="text-[10px] text-slate-400 italic mt-4">&copy; 2026 Versjon 1.9.5</p>
             </div>
             <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl">Lukk</button>
         </div>
@@ -162,92 +162,83 @@
 
         async function sokAdresse() {
             const q = document.getElementById('adresseSok').value;
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}`);
-            const data = await res.json();
-            if (data[0]) settNyStartPosisjon(parseFloat(data[0].lat), parseFloat(data[0].lon), true);
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}`);
+                const data = await res.json();
+                if (data[0]) settNyStartPosisjon(parseFloat(data[0].lat), parseFloat(data[0].lon), true);
+            } catch(e) {}
         }
 
         function beregnEffektivKulde(t, v) { return t > 10 || v < 4.8 ? t : 13.12 + (0.6215 * t) - (11.37 * Math.pow(v, 0.16)) + (0.3965 * t * Math.pow(v, 0.16)); }
 
-async function oppdaterOversikt() {
-    const resDiv = document.getElementById('results');
-    resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner forhold...</div>';
-    vistAntall = 10; filtrerteResultater = [];
+        async function oppdaterOversikt() {
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner forhold...</div>';
+            vistAntall = 10; filtrerteResultater = [];
 
-    let steder = alleSteder.filter(s => {
-        if(hovedKategori === 'sol') return true; 
-        return s.hovedkategori === hovedKategori && s.underkategori === underKategori;
-    });
+            let steder = alleSteder.filter(s => {
+                if(hovedKategori === 'sol') return true; 
+                return s.hovedkategori === hovedKategori && s.underkategori === underKategori;
+            });
 
-    for (const sted of steder) {
-        try {
-            const R = 6371;
-            const dLat = (sted.lat-startPos.lat)*Math.PI/180;
-            const dLon = (sted.lon-startPos.lon)*Math.PI/180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(startPos.lat*Math.PI/180)*Math.cos(sted.lat*Math.PI/180)*Math.sin(dLon/2)**2;
-            const km = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            const tidMin = Math.round(km * 2 + 5);
-            const ankomst = new Date(avreiseTid.getTime() + tidMin * 60000);
+            for (const sted of steder) {
+                try {
+                    const R = 6371;
+                    const dLat = (sted.lat-startPos.lat)*Math.PI/180;
+                    const dLon = (sted.lon-startPos.lon)*Math.PI/180;
+                    const a = Math.sin(dLat/2)**2 + Math.cos(startPos.lat*Math.PI/180)*Math.cos(sted.lat*Math.PI/180)*Math.sin(dLon/2)**2;
+                    const km = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                    const tidMin = Math.round(km * 2 + 5);
+                    const ankomst = new Date(avreiseTid.getTime() + tidMin * 60000);
 
-            const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
-            if (!res.ok) continue; // Hopper over steder som feiler i API-et
-            
-            const data = await res.json();
-            const varsel = data.properties.timeseries.reduce((p, c) => Math.abs(new Date(c.time)-ankomst) < Math.abs(new Date(p.time)-ankomst) ? c : p);
-            
-            const t = varsel.data.instant.details.air_temperature;
-            const vMs = varsel.data.instant.details.wind_speed;
-            const vDir = varsel.data.instant.details.wind_from_direction;
-            const effT = Math.round(beregnEffektivKulde(t, vMs * 3.6));
-            
-            // Fikser symbolkoden for URL-bruk
-            let rawSymbol = varsel.data.next_1_hours ? varsel.data.next_1_hours.summary.symbol_code : "clearsky_day";
-            let symbol = rawSymbol.split('_')[0]; // Forenkler til hovedikonet for maks stabilitet
+                    const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
+                    if (!res.ok) continue;
+                    
+                    const data = await res.json();
+                    const varsel = data.properties.timeseries.reduce((p, c) => Math.abs(new Date(c.time)-ankomst) < Math.abs(new Date(p.time)-ankomst) ? c : p);
+                    
+                    const t = varsel.data.instant.details.air_temperature;
+                    const vMs = varsel.data.instant.details.wind_speed;
+                    const vDir = varsel.data.instant.details.wind_from_direction;
+                    const effT = Math.round(beregnEffektivKulde(t, vMs * 3.6));
+                    
+                    let rawSymbol = varsel.data.next_1_hours ? varsel.data.next_1_hours.summary.symbol_code : "clearsky_day";
+                    let symbol = rawSymbol.split('_')[0]; 
 
-            let score = 100; let warnings = [];
+                    let score = 100; let warnings = [];
 
-            // ADVARSLER
-            if (hovedKategori === 'snø' && effT <= -25) { warnings.push("⚠️ Advarsel om forfrysning!"); score -= 50; }
-            if (hovedKategori === 'sykkel') {
-                if (effT < 0) { warnings.push("⚠️ Is og sne på veien, bruk piggdekk og kle deg godt."); score -= 40; }
-                if (effT <= -15) { warnings.push("❗ Fare for forfrysning!"); score -= 40; }
+                    if (hovedKategori === 'snø' && effT <= -25) { warnings.push("⚠️ Advarsel om forfrysning!"); score -= 50; }
+                    if (hovedKategori === 'sykkel') {
+                        if (effT < 0) { warnings.push("⚠️ Is og sne på veien, bruk piggdekk."); score -= 40; }
+                    }
+                    if (hovedKategori === 'sol') {
+                        const hr = ankomst.getHours();
+                        if (hr < 7 || hr > 18) { score = 0; warnings.push("🌙 Sola har gått ned."); }
+                        else {
+                            if (rawSymbol.includes('sun') || rawSymbol.includes('clear')) score = 100;
+                            else if (rawSymbol.includes('fair')) score = 70;
+                            else score = 20;
+                            score -= (tidMin / 20);
+                        }
+                    }
+
+                    filtrerteResultater.push({ ...sted, t, vMs, vDir, effT, tid: tidMin, score: Math.max(0, Math.round(score)), symbol, warnings });
+                } catch (e) { console.warn(e); }
             }
-            if (hovedKategori === 'vind') {
-                if (t <= 0) { warnings.push("❄️ Farlig pga kulde og isforhold."); score -= 50; }
-                if (effT <= -15) warnings.push("❗ Fare for forfrysning!");
-            }
-            if (hovedKategori === 'tur') {
-                if (t <= 0) warnings.push("⛸️ Glatt føre pga snø og is.");
-                if (effT <= -15 && effT > -25) warnings.push("⚠️ Advarsel om forfrysning!");
-                if (effT <= -25) { warnings.push("🚨 ALVORLIG forfrysning!"); score -= 60; }
-                if (underKategori === 'topper' && t < 0) { warnings.push("⛰️ Kun for profesjonelle klatrere nå!"); score -= 70; }
-            }
-
-            if (hovedKategori === 'sol') {
-                const time = ankomst.getHours();
-                if (time < 7 || time > 18) { score = 0; warnings.push("🌙 Sola har gått ned."); }
-                else {
-                    if (rawSymbol.includes('sun') || rawSymbol.includes('clear')) score = 100;
-                    else if (rawSymbol.includes('fair')) score = 70;
-                    else score = 20;
-                    score -= (tidMin / 20);
-                }
-            }
-
-            filtrerteResultater.push({ ...sted, t, vMs, vDir, effT, tid: tidMin, score: Math.max(0, Math.round(score)), symbol });
-        } catch (e) { 
-            console.warn("Kunne ikke laste data for " + sted.navn, e); 
+            filtrerteResultater.sort((a, b) => b.score - a.score);
+            tegnResultater();
         }
-    }
-    filtrerteResultater.sort((a, b) => b.score - a.score);
-    tegnResultater();
-}
 
         function tegnResultater() {
             const resDiv = document.getElementById('results');
             const porsjon = filtrerteResultater.slice(0, vistAntall);
             document.getElementById('loadMore').classList.toggle('hidden', vistAntall >= filtrerteResultater.length);
-            resDiv.innerHTML = porsjon.map(s => `
+            
+            resDiv.innerHTML = porsjon.map(s => {
+                // Feilsikring for bilde-URL
+                const iconUrl = `https://raw.githubusercontent.com/metno/weathericons/main/weather/png/${s.symbol}.png`;
+                
+                return `
                 <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
@@ -259,16 +250,18 @@ async function oppdaterOversikt() {
                                 <span class="text-[11px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-500">Vind: ${s.vMs} m/s ${graderTilRetning(s.vDir)}</span>
                             </div>
                         </div>
-                        <div class="text-right">
+                        <div class="text-right flex flex-col items-end">
                             <div class="text-2xl font-black ${s.score > 60 ? 'text-green-600' : 'text-orange-500'}">${s.score}%</div>
-                            <img src="https://raw.githubusercontent.com/metno/weathericons/main/weather/png/${s.symbol}.png" class="w-12 h-12 ml-auto">
+                            <img src="${iconUrl}" 
+                                 class="w-12 h-12" 
+                                 onerror="this.parentElement.innerHTML += '☁️'; this.remove();">
                         </div>
                     </div>
                     <div class="mt-2 space-y-1">
                         ${s.warnings.map(w => `<div class="p-2 bg-red-50 text-red-800 text-[10px] font-bold rounded-xl border border-red-100">${w}</div>`).join('')}
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         function visFlere() { vistAntall += 5; tegnResultater(); }
@@ -286,8 +279,17 @@ async function oppdaterOversikt() {
         function aapneOm() { document.getElementById('omModal').style.display = 'flex'; }
         function lukkOm() { document.getElementById('omModal').style.display = 'none'; }
 
+        // Start opp programmet
         oppdaterTidVisning();
-        fetch('locations.json').then(r => r.json()).then(data => { alleSteder = data; setKategori('snø'); });
+        fetch('locations.json')
+            .then(r => r.json())
+            .then(data => { 
+                alleSteder = data; 
+                setKategori('snø'); 
+            })
+            .catch(e => {
+                document.getElementById('results').innerHTML = '<div class="p-8 text-red-500">Kunne ikke laste locations.json. Sjekk at filen ligger i samme mappe.</div>';
+            });
     </script>
 </body>
 </html>
