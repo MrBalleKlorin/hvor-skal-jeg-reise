@@ -15,74 +15,52 @@
 </head>
 <body class="bg-slate-50 font-sans min-h-screen pb-12">
 
-<div id="omModal" class="modal items-center justify-center p-4" style="display: none;">
-    <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
-        <div class="flex justify-between items-start mb-6">
-            <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
-            <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-        </div>
-        
-        <div class="flex gap-4 mb-6">
-            <div class="flex-1 text-center">
-                <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
-                    <img src="Bilder/Knut%20Espen.jpg" alt="Knut Espen Øvreberg" 
-                         class="w-full h-40 object-cover"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl tracking-tighter">KEØ</div>
-                </div>
-                <p class="font-bold text-slate-800 text-xs sm:text-sm">Knut Espen Øvreberg</p>
+    <div id="omModal" class="modal items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
+                <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
             </div>
             
-            <div class="flex-1 text-center">
-                <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
-                    <img src="Bilder/Steinar.jpg" alt="Steinar Bjørnerud" 
-                         class="w-full h-40 object-cover"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl tracking-tighter">SB</div>
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 text-center">
+                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
+                        <img src="Bilder/Knut%20Espen.jpg" alt="Knut Espen Øvreberg" 
+                             class="w-full h-40 object-cover"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl tracking-tighter">KEØ</div>
+                    </div>
+                    <p class="font-bold text-slate-800 text-xs">Knut Espen Øvreberg</p>
                 </div>
-                <p class="font-bold text-slate-800 text-xs sm:text-sm">Steinar Bjørnerud</p>
-            </div>
-        </div>
-
-        <div class="space-y-4">
-            <p class="text-slate-700 leading-relaxed text-sm">Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.</p>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-600">
-                <p class="font-bold text-blue-900 mb-1 font-bold">Eierskap & Utvikling</p>
-                <p>Programmet er eiet og utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
-                <p class="mt-4 text-[10px] text-slate-400 italic font-medium">&copy; 2026 Alle rettigheter forbeholdt.<br>Versjon 1.3.1 - Sist oppdatert: 25. jan 2026</p>
-            </div>
-        </div>
-        <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg">Lukk</button>
-    </div>
-</div>            
-            <div class="flex-1 text-center">
-                <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
-                    <img src="Bilder/Steinar.jpg" alt="Steinar Bjørnerud" 
-                         class="w-full h-40 object-cover"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl tracking-tighter">SB</div>
+                
+                <div class="flex-1 text-center">
+                    <div class="relative w-full h-40 bg-slate-200 rounded-2xl overflow-hidden border-2 border-blue-50 mb-2 shadow-sm">
+                        <img src="Bilder/Steinar.jpg" alt="Steinar Bjørnerud" 
+                             class="w-full h-40 object-cover"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden absolute inset-0 items-center justify-center bg-blue-100 text-blue-600 font-bold text-2xl tracking-tighter">SB</div>
+                    </div>
+                    <p class="font-bold text-slate-800 text-xs">Steinar Bjørnerud</p>
                 </div>
-                <p class="font-bold text-slate-800 text-xs sm:text-sm">Steinar Bjørnerud</p>
             </div>
-        </div>
 
-        <div class="space-y-4">
-            <p class="text-slate-700 leading-relaxed text-sm">Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.</p>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-600">
-                <p class="font-bold text-blue-900 mb-1 font-bold">Eierskap & Utvikling</p>
-                <p>Programmet er eiet og utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
-                <p class="mt-4 text-[10px] text-slate-400 italic font-medium">&copy; 2026 Alle rettigheter forbeholdt.<br>Versjon 1.3.1 - Sist oppdatert: 25. jan 2026</p>
+            <div class="space-y-4">
+                <p class="text-slate-700 leading-relaxed text-sm">Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin opplevelse når du skal gjøre din aktivitet.</p>
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-600">
+                    <p class="font-bold text-blue-900 mb-1">Eierskap & Utvikling</p>
+                    <p>Programmet er eiet og utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
+                    <p class="mt-4 text-[10px] text-slate-400 italic font-medium">&copy; 2026 Alle rettigheter forbeholdt.<br>Versjon 1.3.1</p>
+                </div>
             </div>
-            <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg">Lukk</button>
+            <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all">Lukk</button>
         </div>
-        <button onclick="lukkOm()" class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg">Lukk</button>
     </div>
 
     <div class="max-w-6xl mx-auto p-4 md:p-8">
         <header class="mb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
             <div class="text-center md:text-left">
                 <h1 class="text-4xl font-black text-blue-900 tracking-tight">Hvor skal jeg reise?</h1>
-                <p class="text-slate-600 mt-2 font-semibold">Knut Espen og Steinars versjon (1.3.0)</p>
+                <p class="text-slate-600 mt-2 font-semibold tracking-tight text-sm">Knut Espen og Steinars versjon 1.3.1</p>
             </div>
             <button onclick="aapneOm()" class="px-6 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2">ℹ️ Om programmet</button>
         </header>
@@ -111,7 +89,7 @@
             </div>
 
             <div class="space-y-4">
-                <h2 class="text-2xl font-bold px-2 flex items-center gap-2 text-slate-800">🎯 Anbefalt lokasjon:</h2>
+                <h2 class="text-2xl font-bold px-2 flex items-center gap-2 text-slate-800">🎯 Anbefalt:</h2>
                 <div id="results" class="grid grid-cols-1 gap-3"></div>
             </div>
         </div>
@@ -200,7 +178,7 @@
 
         async function oppdaterOversikt() {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner beste forhold for deg...</div>';
+            resultsDiv.innerHTML = '<div class="p-12 text-center text-slate-400 animate-pulse font-medium">Beregner beste forhold...</div>';
             
             let liste = [];
             const mnd = new Date().getMonth(); 
@@ -225,8 +203,6 @@
                     let score = 100;
                     let kommentar = "";
 
-                    // --- AKTIVITETS-LOGIKK MOTORER ---
-                    
                     if (hovedKategori === 'snø') {
                         if (mnd > 3 && mnd < 10 && sted.navn !== "SNØ Lørenskog") { 
                             score = 0; kommentar = "Utenfor sesong"; 
@@ -235,52 +211,47 @@
                                 if (det.air_temperature > 0) score -= 35;
                                 if (det.wind_speed > 4) score -= (det.wind_speed * 6);
                                 if (probRegn > 20) score -= 30;
-                            } else { // Alpint
+                            } else {
                                 if (det.wind_speed > 12) { score -= 70; kommentar = "Fare for stengt heis"; }
                                 if (det.air_temperature > 3) score -= 20;
                             }
                         }
                     } 
                     else if (hovedKategori === 'sykkel') {
-                        if (mnd < 2 || mnd > 10) { score = 10; kommentar = "Vinterstengt?"; }
+                        if (mnd < 2 || mnd > 10) { score = 10; kommentar = "Sjekk forholdene"; }
                         if (underKategori === 'landevei') {
                             if (det.wind_speed > 5) score -= (det.wind_speed * 8);
-                            if (probRegn > 5) score -= 60; // Landevei er kjedelig i regn
-                        } else { // Terreng
-                            if (probRegn > 30) score -= 40; // Gjørme
+                            if (probRegn > 5) score -= 60;
+                        } else {
+                            if (probRegn > 30) score -= 40;
                             if (det.wind_speed > 8) score -= 20;
                         }
                     }
                     else if (hovedKategori === 'tur') {
                         if (probRegn > 40) score -= 50;
                         if (underKategori === 'topper' && det.wind_speed > 10) score -= 40;
-                        if (underKategori === 'byen' && det.wind_speed > 12) score -= 20;
                     }
 
-                    // Felles Sol-bonus
                     if (det.cloud_area_fraction < 20) score += 10;
-                    // Felles Reise-trekk
                     score -= (kjøreMin / 5);
-
                     score = Math.max(0, Math.min(100, Math.round(score)));
 
                     liste.push({ ...sted, temp: det.air_temperature.toFixed(1), vind: det.wind_speed.toFixed(1), tid: kjøreMin, visTid: formaterTid(kjøreMin), score, kommentar });
                 } catch (e) { console.error(e); }
             }
 
-            liste.sort((a, b) => b.score !== a.score ? b.score - a.score : a.tid - b.tid);
-
+            liste.sort((a, b) => b.score - a.score);
             resultsDiv.innerHTML = '';
             liste.forEach(s => {
                 resultsDiv.innerHTML += `
-                    <div class="bg-white p-5 rounded-3xl border ${s.score > 80 ? 'border-green-200 bg-green-50/20' : 'border-slate-100'} flex justify-between items-center shadow-sm hover:shadow-md transition-all">
+                    <div class="bg-white p-5 rounded-3xl border ${s.score > 80 ? 'border-green-200 bg-green-50/20' : 'border-slate-100'} flex justify-between items-center shadow-sm">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-blue-500 tracking-widest">${s.fylke} • ${s.omrade}</span>
-                            <h3 class="font-bold text-slate-900 text-xl leading-tight">${s.navn}</h3>
-                            <div class="flex gap-4 text-sm font-semibold text-slate-500 mt-2">
-                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span class="${s.tid > 60 ? 'text-orange-500' : 'text-blue-600'}">🚗 ${s.visTid}</span>
+                            <h3 class="font-bold text-slate-900 text-lg leading-tight">${s.navn}</h3>
+                            <div class="flex gap-4 text-xs font-semibold text-slate-500 mt-2">
+                                <span>🌡️ ${s.temp}°C</span> <span>💨 ${s.vind} m/s</span> <span>🚗 ${s.visTid}</span>
                             </div>
-                            ${s.kommentar ? `<p class="text-[11px] text-red-500 font-bold mt-1 uppercase italic">${s.kommentar}</p>` : ''}
+                            ${s.kommentar ? `<p class="text-[10px] text-red-500 font-bold mt-1 uppercase italic">${s.kommentar}</p>` : ''}
                         </div>
                         <div class="text-right ml-4">
                             <div class="text-3xl font-black ${s.score > 70 ? 'text-green-600' : 'text-slate-400'}">${s.score}%</div>
