@@ -398,8 +398,14 @@
             setKategori('tur');
         });
     </script>
+    <!-- Om-knapp plassert øverst høyre -->
+    <div class="fixed top-6 right-6 z-50">
+        <button onclick="visOm()" class="px-4 py-2 bg-blue-600 text-white rounded-2xl font-bold">Om</button>
+    </div>
+
     <!-- Modal for Om-programmet -->
-    <div id="omModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
+    <div id="omModal"
+        class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
             <div class="flex justify-between items-start mb-6">
                 <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
@@ -410,17 +416,21 @@
                     <img src="Bilder/Knut%20Espen.jpg"
                         class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm"
                         onerror="this.src='https://via.placeholder.com/150?text=KEØ'">
-                    <p class="font-bold text-slate-800 text-[10px]">Knut Espen Øvreberg</p>
+                    <p class="font-bold text-slate-800 text-xs">Knut Espen Øvreberg</p>
                 </div>
                 <div class="flex-1 text-center">
                     <img src="Bilder/Steinar.jpg"
                         class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm"
                         onerror="this.src='https://via.placeholder.com/150?text=SB'">
-                    <p class="font-bold text-slate-800 text-[10px]">Steinar Bjørnerud</p>
+                    <p class="font-bold text-slate-800 text-xs">Steinar Bjørnerud</p>
                 </div>
             </div>
-            <p class="text-xs text-slate-600 mb-6 italic text-center">"Finn rett sted til rett tid"</p>
-            <p class="text-[10px] text-slate-400 text-center">&copy; 2026 Versjon 2.0.0</p>
+            <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                <p>Formålet med dette programmet er å hjelpe deg til å finne rett sted å reise til for å få en fin
+                    opplevelse.</p>
+                <p>Utviklet av Knut Espen Øvreberg og Steinar Bjørnerud.</p>
+                <p class="text-[10px] text-slate-400 italic mt-4">&copy; 2026 Versjon 1.9.4</p>
+            </div>
             <button onclick="lukkOm()"
                 class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl">Lukk</button>
         </div>
@@ -434,6 +444,8 @@
         function lukkOm() {
             document.getElementById('omModal').classList.add('hidden');
         }
+    </script>
+
     </script>
 
 </body>
