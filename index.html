@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="no">
 
@@ -133,13 +132,11 @@ html
             color: white;
         }
 
-        /* Hurtigknapper større */
         .time-btn-large {
             font-size: 1.25rem;
             padding: 1.25rem;
         }
 
-        /* + / - knappene større */
         .time-btn-big {
             font-size: 1.5rem;
             padding: 0.8rem 1.2rem;
@@ -149,15 +146,15 @@ html
 
 <body class="p-6 md:p-12">
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div class="space-y-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Venstre kolonne: felt 1-3 -->
+        <div class="lg:col-span-2 space-y-8">
             <h1 class="text-4xl font-black text-blue-900 mb-8">Hvor skal jeg reise?</h1>
 
             <!-- Felt 1: Startpunkt -->
             <div class="card">
                 <div class="flex items-center gap-4 mb-6">
-                    <span
-                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">1</span>
+                    <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">1</span>
                     <h2 class="text-2xl font-black">Mitt startpunkt</h2>
                 </div>
                 <div class="flex gap-3">
@@ -174,21 +171,15 @@ html
             <!-- Felt 2: Aktivitet -->
             <div class="card">
                 <div class="flex items-center gap-4 mb-6">
-                    <span
-                        class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
+                    <span class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
                     <h2 class="text-2xl font-black">Hva vil du gjøre?</h2>
                 </div>
                 <div class="flex gap-2 p-2 bg-slate-100 rounded-[25px] mb-6">
-                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill flex-1 justify-center">❄️
-                        Snø</button>
-                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill flex-1 justify-center">🥾
-                        Tur</button>
-                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill flex-1 justify-center">🚲
-                        Sykkel</button>
-                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill flex-1 justify-center">💨
-                        Vind</button>
-                    <button onclick="setKategori('sol')" id="cat-sol" class="cat-pill flex-1 justify-center">☀️
-                        Sol</button>
+                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill flex-1 justify-center">❄️ Snø</button>
+                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill flex-1 justify-center">🥾 Tur</button>
+                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill flex-1 justify-center">🚲 Sykkel</button>
+                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill flex-1 justify-center">💨 Vind</button>
+                    <button onclick="setKategori('sol')" id="cat-sol" class="cat-pill flex-1 justify-center">☀️ Sol</button>
                 </div>
                 <div id="sub-menu" class="grid grid-cols-2 gap-4"></div>
             </div>
@@ -196,23 +187,18 @@ html
             <!-- Felt 3: Tid -->
             <div class="card" id="felt-3-tid">
                 <div class="flex items-center gap-4 mb-6">
-                    <span
-                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
+                    <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
                     <h2 class="text-2xl font-black">Når skal du reise?</h2>
                 </div>
 
                 <div class="space-y-6 mb-6">
-
-                    <!-- Hurtigknapper -->
                     <div class="grid grid-cols-3 gap-3">
                         <button onclick="settHurtigTid(0)" class="time-btn time-btn-large">NÅ</button>
                         <button onclick="settHurtigTid(15)" class="time-btn time-btn-large">Om 15 MIN</button>
                         <button onclick="settHurtigTid(30)" class="time-btn time-btn-large">Om 30 MIN</button>
                     </div>
 
-                    <!-- + / - for timer (1h og 6h på samme linje) -->
                     <div class="flex gap-4">
-                        <!-- 1 time -->
                         <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
                             <span class="font-black text-blue-700 uppercase text-sm">1 time</span>
                             <div class="flex gap-2">
@@ -221,7 +207,6 @@ html
                             </div>
                         </div>
 
-                        <!-- 6 timer -->
                         <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
                             <span class="font-black text-blue-700 uppercase text-sm">6 timer</span>
                             <div class="flex gap-2">
@@ -230,14 +215,11 @@ html
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Valgt tidspunkt -->
                 <div class="time-display-box">
                     <div>
-                        <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">VALGT
-                            TIDSPUNKT:</span>
+                        <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">VALGT TIDSPUNKT:</span>
                         <span id="visningsTid" class="text-lg font-bold text-blue-800"></span>
                     </div>
                     <div class="bg-white rounded-2xl p-2 border border-slate-100">
@@ -246,12 +228,11 @@ html
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- RESULTATER (HØYRE KOLONNE PÅ STOR SKJERM / UNDER PÅ MOBIL) -->
-            <div class="flex-1 space-y-8 lg:pl-8">
-                <div id="results" class="space-y-4 pt-16"></div>
-            </div>
-
+        <!-- Høyre kolonne: resultater -->
+        <div class="space-y-8 lg:pl-8">
+            <div id="results" class="space-y-4 pt-16"></div>
         </div>
     </div>
 
@@ -394,7 +375,6 @@ html
         function justerTid(m) { avreiseTid = new Date(avreiseTid.getTime() + m * 60000); oppdaterTidVisning(); oppdaterOversikt(); }
         function settEgendefinertTid() { const valgt = new Date(document.getElementById('customTime').value); if (!isNaN(valgt.getTime())) { avreiseTid = valgt; oppdaterTidVisning(); oppdaterOversikt(); } }
 
-        // Last inn lokasjoner
         fetch('locations.json').then(r => r.json()).then(data => {
             alleSteder = data;
             oppdaterTidVisning();
