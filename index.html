@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="no">
 
@@ -155,7 +156,8 @@
             <!-- Felt 1: Startpunkt -->
             <div class="card">
                 <div class="flex items-center gap-4 mb-6">
-                    <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">1</span>
+                    <span
+                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">1</span>
                     <h2 class="text-2xl font-black">Mitt startpunkt</h2>
                 </div>
                 <div class="flex gap-3">
@@ -172,15 +174,21 @@
             <!-- Felt 2: Aktivitet -->
             <div class="card">
                 <div class="flex items-center gap-4 mb-6">
-                    <span class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
+                    <span
+                        class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
                     <h2 class="text-2xl font-black">Hva vil du gjøre?</h2>
                 </div>
                 <div class="flex gap-2 p-2 bg-slate-100 rounded-[25px] mb-6">
-                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill flex-1 justify-center">❄️ Snø</button>
-                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill flex-1 justify-center">🥾 Tur</button>
-                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill flex-1 justify-center">🚲 Sykkel</button>
-                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill flex-1 justify-center">💨 Vind</button>
-                    <button onclick="setKategori('sol')" id="cat-sol" class="cat-pill flex-1 justify-center">☀️ Sol</button>
+                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill flex-1 justify-center">❄️
+                        Snø</button>
+                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill flex-1 justify-center">🥾
+                        Tur</button>
+                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill flex-1 justify-center">🚲
+                        Sykkel</button>
+                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill flex-1 justify-center">💨
+                        Vind</button>
+                    <button onclick="setKategori('sol')" id="cat-sol" class="cat-pill flex-1 justify-center">☀️
+                        Sol</button>
                 </div>
                 <div id="sub-menu" class="grid grid-cols-2 gap-4"></div>
             </div>
@@ -188,7 +196,8 @@
             <!-- Felt 3: Tid -->
             <div class="card" id="felt-3-tid">
                 <div class="flex items-center gap-4 mb-6">
-                    <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
+                    <span
+                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
                     <h2 class="text-2xl font-black">Når skal du reise?</h2>
                 </div>
 
@@ -238,7 +247,10 @@
                 </div>
             </div>
 
-            <div id="results" class="space-y-4 pt-16"></div>
+            <div class="space-y-8"> <!-- HØYRE KOLONNE -->
+                <div id="results" class="space-y-4 pt-16"></div>
+            </div>
+
         </div>
     </div>
 
@@ -382,10 +394,10 @@
         function settEgendefinertTid() { const valgt = new Date(document.getElementById('customTime').value); if (!isNaN(valgt.getTime())) { avreiseTid = valgt; oppdaterTidVisning(); oppdaterOversikt(); } }
 
         // Last inn lokasjoner
-        fetch('locations.json').then(r => r.json()).then(data => { 
-            alleSteder = data; 
-            oppdaterTidVisning(); 
-            setKategori('tur'); 
+        fetch('locations.json').then(r => r.json()).then(data => {
+            alleSteder = data;
+            oppdaterTidVisning();
+            setKategori('tur');
         });
     </script>
 
