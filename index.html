@@ -398,14 +398,16 @@
             setKategori('tur');
         });
     </script>
-    <!-- Om-knapp plassert øverst høyre -->
-    <div class="fixed top-6 right-6 z-50">
+    <!-- Fjern denne fra venstre kolonne -->
+    <!-- <button onclick="visOm()" class="ml-auto px-4 py-2 bg-blue-600 text-white rounded-2xl font-bold">Om</button> -->
+
+    <!-- Om-knapp øverst høyre -->
+    <div class="fixed top-6 right-6 z-[2000]">
         <button onclick="visOm()" class="px-4 py-2 bg-blue-600 text-white rounded-2xl font-bold">Om</button>
     </div>
 
-    <!-- Modal for Om-programmet -->
-    <div id="omModal"
-        class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <!-- Modal -->
+    <div id="omModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[2000]">
         <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
             <div class="flex justify-between items-start mb-6">
                 <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
@@ -440,7 +442,6 @@
         function visOm() {
             document.getElementById('omModal').classList.remove('hidden');
         }
-
         function lukkOm() {
             document.getElementById('omModal').classList.add('hidden');
         }
