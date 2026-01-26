@@ -156,6 +156,8 @@
         <!-- Venstre kolonne: felt 1-3 -->
         <div class="w-full lg:w-1/2 space-y-8">
             <h1 class="text-4xl font-black text-blue-900 mb-8">Hvor skal jeg reise?</h1>
+            <button onclick="visOm()" class="ml-auto px-4 py-2 bg-blue-600 text-white rounded-2xl font-bold">Om</button>
+
 
             <!-- Felt 1: Startpunkt -->
             <div class="card">
@@ -395,6 +397,43 @@
             oppdaterTidVisning();
             setKategori('tur');
         });
+    </script>
+    <!-- Modal for Om-programmet -->
+    <div id="omModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
+        <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl overflow-y-auto max-h-[95vh]">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-2xl font-bold text-blue-900">Om programmet</h2>
+                <button onclick="lukkOm()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+            </div>
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 text-center">
+                    <img src="Bilder/Knut%20Espen.jpg"
+                        class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm"
+                        onerror="this.src='https://via.placeholder.com/150?text=KEØ'">
+                    <p class="font-bold text-slate-800 text-[10px]">Knut Espen Øvreberg</p>
+                </div>
+                <div class="flex-1 text-center">
+                    <img src="Bilder/Steinar.jpg"
+                        class="w-full h-40 object-cover rounded-2xl border-2 border-blue-50 mb-2 shadow-sm"
+                        onerror="this.src='https://via.placeholder.com/150?text=SB'">
+                    <p class="font-bold text-slate-800 text-[10px]">Steinar Bjørnerud</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-600 mb-6 italic text-center">"Finn rett sted til rett tid"</p>
+            <p class="text-[10px] text-slate-400 text-center">&copy; 2026 Versjon 2.0.0</p>
+            <button onclick="lukkOm()"
+                class="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl">Lukk</button>
+        </div>
+    </div>
+
+    <script>
+        function visOm() {
+            document.getElementById('omModal').classList.remove('hidden');
+        }
+
+        function lukkOm() {
+            document.getElementById('omModal').classList.add('hidden');
+        }
     </script>
 
 </body>
