@@ -337,16 +337,19 @@
         }
 
         function oppdaterTidVisning() {
+            // Maks 48 timer frem i tid
             const maksTid = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
             if (avreiseTid > maksTid) avreiseTid = maksTid;
             if (avreiseTid < new Date()) avreiseTid = new Date();
 
-            const s = avreiseTid.toLocaleString('no-NO', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            // Vis kun dag, måned, timer og minutter
+            const s = avreiseTid.toLocaleString('no-NO', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
             document.getElementById('visningsTid').innerText = s;
+        }
 
-            const tzOffset = avreiseTid.getTimezoneOffset() * 60000;
-            const localISODate = new Date(avreiseTid.getTime() - tzOffset).toISOString().slice(0, 16);
-            document.getElementById('customTime').value = localISODate;
+        const tzOffset = avreiseTid.getTimezoneOffset() * 60000;
+        const localISODate = new Date(avreiseTid.getTime() - tzOffset).toISOString().slice(0, 16);
+        document.getElementById('customTime').value = localISODate;
         }
 
         function setKategori(k) {
