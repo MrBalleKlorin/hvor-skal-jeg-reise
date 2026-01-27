@@ -183,73 +183,71 @@
                         class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
                     <h2 class="text-2xl font-black">Hva vil du gjøre?</h2>
                 </div>
-                <div class="flex gap-2 p-2 bg-slate-100 rounded-[25px] mb-6">
-                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill flex-1 justify-center">❄️
-                        Snø</button>
-                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill flex-1 justify-center">🥾
-                        Tur</button>
-                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill flex-1 justify-center">🚲
-                        Sykkel</button>
-                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill flex-1 justify-center">💨
-                        Vind</button>
-                    <button onclick="setKategori('sol')" id="cat-sol" class="cat-pill flex-1 justify-center">☀️
-                        Sol</button>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:flex gap-2 p-2 bg-slate-100 rounded-[25px] mb-6">
+                    <button onclick="setKategori('snø')" id="cat-snø" class="cat-pill w-full">❄️ Snø</button>
+                    <button onclick="setKategori('tur')" id="cat-tur" class="cat-pill w-full">🥾 Tur</button>
+                    <button onclick="setKategori('sykkel')" id="cat-sykkel" class="cat-pill w-full">🚲 Sykkel</button>
+                    <button onclick="setKategori('vind')" id="cat-vind" class="cat-pill w-full">💨 Vind</button>
+                    <button onclick="setKategori('sol')" id="cat-sol"
+                        class="cat-pill w-full sm:col-span-3 lg:col-span-1">☀️ Sol</button>
                 </div>
-                <div id="sub-menu" class="grid grid-cols-2 gap-4"></div>
+
+            </div>
+            <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- Felt 3: Tid -->
+        <div class="card" id="felt-3-tid">
+            <div class="flex items-center gap-4 mb-6">
+                <span
+                    class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
+                <h2 class="text-2xl font-black">Når skal du reise?</h2>
             </div>
 
-            <!-- Felt 3: Tid -->
-            <div class="card" id="felt-3-tid">
-                <div class="flex items-center gap-4 mb-6">
-                    <span
-                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
-                    <h2 class="text-2xl font-black">Når skal du reise?</h2>
+            <div class="space-y-6 mb-6">
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="settHurtigTid(0)" class="time-btn time-btn-large">NÅ</button>
+                    <button onclick="settHurtigTid(15)" class="time-btn time-btn-large">Om 15 MIN</button>
+                    <button onclick="settHurtigTid(30)" class="time-btn time-btn-large">Om 30 MIN</button>
                 </div>
 
-                <div class="space-y-6 mb-6">
-                    <div class="grid grid-cols-3 gap-3">
-                        <button onclick="settHurtigTid(0)" class="time-btn time-btn-large">NÅ</button>
-                        <button onclick="settHurtigTid(15)" class="time-btn time-btn-large">Om 15 MIN</button>
-                        <button onclick="settHurtigTid(30)" class="time-btn time-btn-large">Om 30 MIN</button>
+                <div class="flex gap-4">
+                    <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
+                        <span class="font-black text-blue-700 uppercase text-sm">1 time</span>
+                        <div class="flex gap-2">
+                            <button onclick="justerTid(-60)" class="time-btn time-btn-blue time-btn-big">−</button>
+                            <button onclick="justerTid(60)" class="time-btn time-btn-blue time-btn-big">+</button>
+                        </div>
                     </div>
 
-                    <div class="flex gap-4">
-                        <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
-                            <span class="font-black text-blue-700 uppercase text-sm">1 time</span>
-                            <div class="flex gap-2">
-                                <button onclick="justerTid(-60)" class="time-btn time-btn-blue time-btn-big">−</button>
-                                <button onclick="justerTid(60)" class="time-btn time-btn-blue time-btn-big">+</button>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
-                            <span class="font-black text-blue-700 uppercase text-sm">6 timer</span>
-                            <div class="flex gap-2">
-                                <button onclick="justerTid(-360)" class="time-btn time-btn-blue time-btn-big">−</button>
-                                <button onclick="justerTid(360)" class="time-btn time-btn-blue time-btn-big">+</button>
-                            </div>
+                    <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 flex-1">
+                        <span class="font-black text-blue-700 uppercase text-sm">6 timer</span>
+                        <div class="flex gap-2">
+                            <button onclick="justerTid(-360)" class="time-btn time-btn-blue time-btn-big">−</button>
+                            <button onclick="justerTid(360)" class="time-btn time-btn-blue time-btn-big">+</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="time-display-box">
-                    <div>
-                        <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">VALGT
-                            TIDSPUNKT:</span>
-                        <span id="visningsTid" class="text-lg font-bold text-blue-800"></span>
-                    </div>
-                    <div class="bg-white rounded-2xl p-2 border border-slate-100">
-                        <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()"
-                            class="bg-transparent font-bold text-blue-600 text-sm outline-none px-2 cursor-pointer">
-                    </div>
+            <div class="time-display-box">
+                <div>
+                    <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">VALGT
+                        TIDSPUNKT:</span>
+                    <span id="visningsTid" class="text-lg font-bold text-blue-800"></span>
+                </div>
+                <div class="bg-white rounded-2xl p-2 border border-slate-100">
+                    <input type="datetime-local" id="customTime" onchange="settEgendefinertTid()"
+                        class="bg-transparent font-bold text-blue-600 text-sm outline-none px-2 cursor-pointer">
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Høyre kolonne: resultater -->
-        <div class="w-full lg:w-1/2 space-y-8 lg:pl-4">
-            <div id="results" class="space-y-4 pt-16"></div>
-        </div>
+    <!-- Høyre kolonne: resultater -->
+    <div class="w-full lg:w-1/2 space-y-8 lg:pl-4">
+        <div id="results" class="space-y-4 pt-16"></div>
+    </div>
     </div>
 
     <script>
