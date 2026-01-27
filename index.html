@@ -197,8 +197,9 @@
 
                 <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
             </div>
-            <!-- Felt 3: Tid – kompakt, med NÅ ved siden av tittel og + / - 1h/6h -->
-            <div class="card" id="felt-3-tid" aria-label="Felt 3 - Tid">
+
+            <!-- Felt 3: Tid – kompakt og korrekt visning -->
+            <div class="card flex-shrink-0" id="felt-3-tid" aria-label="Felt 3 - Tid">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-4">
                         <span
@@ -240,26 +241,22 @@
                     if (avreiseTid > maksTid) avreiseTid = maksTid;
                     if (avreiseTid < now) avreiseTid = now;
 
-                    let visTekst = "";
                     const dag = avreiseTid.getDate();
                     const mnd = avreiseTid.getMonth() + 1;
                     const år = avreiseTid.getFullYear();
                     const timer = avreiseTid.getHours().toString().padStart(2, '0');
                     const min = avreiseTid.getMinutes().toString().padStart(2, '0');
 
-                    const iDag = now.getDate() === dag && now.getMonth() + 1 === mnd && now.getFullYear() === år;
-                    const iMorgen = new Date(now.getTime() + 24 * 60 * 60 * 1000).getDate() === dag;
-                    const overimorgen = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000).getDate() === dag;
-
-                    if (iDag) visTekst = `I dag ${timer}:${min}`;
-                    else if (iMorgen) visTekst = `I morgen ${timer}:${min}`;
-                    else if (overimorgen) visTekst = `Overimorgen ${timer}:${min}`;
-                    else visTekst = `${dag.toString().padStart(2, '0')}.${mnd.toString().padStart(2, '0')} ${timer}:${min}`;
+                    let visTekst = "";
+                    if (dag === now.getDate() && mnd === (now.getMonth() + 1) && år === now.getFullYear()) {
+                        visTekst = `I dag ${timer}:${min}`;
+                    } else {
+                        visTekst = `${dag.toString().padStart(2, '0')}.${mnd.toString().padStart(2, '0')} ${timer}:${min}`;
+                    }
 
                     document.getElementById('visningsTid').innerText = visTekst;
                 }
             </script>
-
 
         </div>
 
