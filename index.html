@@ -208,20 +208,35 @@
             <!-- Innhold: Hurtigvalg + Valgt tidspunkt -->
             <div class="space-y-4">
 
-                <!-- Hurtigvalg: Kun NÅ-knappen -->
+                <!-- Hurtigvalg: Kun NÅ-knapp -->
                 <div class="w-full">
                     <button onclick="settHurtigTid(0)" class="time-btn time-btn-large w-full">NÅ</button>
                 </div>
 
                 <!-- Valgt tidspunkt -->
                 <div class="flex items-center justify-start bg-blue-50 rounded-2xl p-3 gap-2">
-                    <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block">VALGT
-                        TIDSPUNKT:</span>
+                    <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block">
+                        VALGT TIDSPUNKT:
+                    </span>
                     <span id="visningsTid" class="text-base font-bold text-blue-800"></span>
                 </div>
-
             </div>
         </div>
+
+        <style>
+            /* Sørger for at Felt 3 alltid holder seg i venstre kolonne */
+            #felt-3-tid {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            @media (min-width: 1024px) {
+                #felt-3-tid {
+                    /* Tvinger Felt 3 til venstre kolonne */
+                    flex-shrink: 0;
+                }
+            }
+        </style>
 
 
         <!-- Høyre kolonne: resultater -->
@@ -337,15 +352,19 @@
         }
 
         function oppdaterTidVisning() {
-            // Maks 48 timer frem i tid
             const maksTid = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
             if (avreiseTid > maksTid) avreiseTid = maksTid;
             if (avreiseTid < new Date()) avreiseTid = new Date();
 
-            // Vis kun dag, måned, timer og minutter
-            const s = avreiseTid.toLocaleString('no-NO', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+            const s = avreiseTid.toLocaleString('no-NO', {
+                day: '2-digit',
+                month: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
             document.getElementById('visningsTid').innerText = s;
         }
+
 
         const tzOffset = avreiseTid.getTimezoneOffset() * 60000;
         const localISODate = new Date(avreiseTid.getTime() - tzOffset).toISOString().slice(0, 16);
