@@ -197,36 +197,34 @@
 
                 <div id="sub-menu" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
             </div>
-
-            <!-- Felt 3: Tid — kompakt og med + / - 1h og 6h -->
+            <!-- Felt 3: Tid – kompakt, med NÅ ved siden av tittel og + / - 1h/6h -->
             <div class="card" id="felt-3-tid" aria-label="Felt 3 - Tid">
-                <div class="flex items-center gap-4 mb-4">
-                    <span
-                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
-                    <h2 class="text-2xl font-black">Når skal du reise?</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">3</span>
+                        <h2 class="text-2xl font-black">Når?</h2>
+                    </div>
+                    <button onclick="settHurtigTid(0)"
+                        class="time-btn time-btn-blue px-6 py-3 text-lg font-bold">NÅ</button>
                 </div>
 
-                <div class="space-y-4">
-                    <!-- NÅ knapp -->
-                    <div class="w-full">
-                        <button onclick="settHurtigTid(0)" class="time-btn time-btn-blue w-full">NÅ</button>
-                    </div>
-
+                <div class="space-y-3">
                     <!-- 1 time justering -->
                     <div class="flex items-center gap-3 justify-start">
-                        <button onclick="justerTid(-60)" class="time-btn px-4 py-2">-</button>
+                        <button onclick="justerTid(-60)" class="time-btn px-4 py-2 text-base font-bold">-</button>
                         <span class="text-sm font-bold w-16 text-center">1 time</span>
-                        <button onclick="justerTid(60)" class="time-btn px-4 py-2">+</button>
+                        <button onclick="justerTid(60)" class="time-btn px-4 py-2 text-base font-bold">+</button>
                     </div>
 
                     <!-- 6 timer justering -->
                     <div class="flex items-center gap-3 justify-start">
-                        <button onclick="justerTid(-360)" class="time-btn px-4 py-2">-</button>
+                        <button onclick="justerTid(-360)" class="time-btn px-4 py-2 text-base font-bold">-</button>
                         <span class="text-sm font-bold w-16 text-center">6 timer</span>
-                        <button onclick="justerTid(360)" class="time-btn px-4 py-2">+</button>
+                        <button onclick="justerTid(360)" class="time-btn px-4 py-2 text-base font-bold">+</button>
                     </div>
 
-                    <!-- Visning av valgt tidspunkt (dag.måned hh:mm) -->
+                    <!-- Visning av valgt tidspunkt -->
                     <div class="flex items-center justify-start bg-blue-50 rounded-2xl p-3 gap-3">
                         <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest">VALGT
                             TIDSPUNKT:</span>
@@ -235,12 +233,42 @@
                 </div>
             </div>
 
-        </div> <!-- end venstre kolonne -->
+            <script>
+                function oppdaterTidVisning() {
+                    const now = new Date();
+                    const maksTid = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+                    if (avreiseTid > maksTid) avreiseTid = maksTid;
+                    if (avreiseTid < now) avreiseTid = now;
 
-        <!-- HØYRE kolonne: resultater -->
-        <div class="w-full lg:w-1/2 space-y-8 lg:pl-4">
-            <div id="results" class="space-y-4 pt-16"></div>
+                    let visTekst = "";
+                    const dag = avreiseTid.getDate();
+                    const mnd = avreiseTid.getMonth() + 1;
+                    const år = avreiseTid.getFullYear();
+                    const timer = avreiseTid.getHours().toString().padStart(2, '0');
+                    const min = avreiseTid.getMinutes().toString().padStart(2, '0');
+
+                    const iDag = now.getDate() === dag && now.getMonth() + 1 === mnd && now.getFullYear() === år;
+                    const iMorgen = new Date(now.getTime() + 24 * 60 * 60 * 1000).getDate() === dag;
+                    const overimorgen = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000).getDate() === dag;
+
+                    if (iDag) visTekst = `I dag ${timer}:${min}`;
+                    else if (iMorgen) visTekst = `I morgen ${timer}:${min}`;
+                    else if (overimorgen) visTekst = `Overimorgen ${timer}:${min}`;
+                    else visTekst = `${dag.toString().padStart(2, '0')}.${mnd.toString().padStart(2, '0')} ${timer}:${min}`;
+
+                    document.getElementById('visningsTid').innerText = visTekst;
+                }
+            </script>
+
+
         </div>
+
+    </div> <!-- end venstre kolonne -->
+
+    <!-- HØYRE kolonne: resultater -->
+    <div class="w-full lg:w-1/2 space-y-8 lg:pl-4">
+        <div id="results" class="space-y-4 pt-16"></div>
+    </div>
 
     </div> <!-- end layout -->
 
