@@ -237,10 +237,6 @@
             <script>
                 function oppdaterTidVisning() {
                     const now = new Date();
-                    const maksTid = new Date(now.getTime() + 48 * 60 * 60 * 1000);
-                    if (avreiseTid > maksTid) avreiseTid = maksTid;
-                    if (avreiseTid < now) avreiseTid = now;
-
                     const dag = avreiseTid.getDate();
                     const mnd = avreiseTid.getMonth() + 1;
                     const år = avreiseTid.getFullYear();
@@ -256,6 +252,8 @@
 
                     document.getElementById('visningsTid').innerText = visTekst;
                 }
+
+                
             </script>
 
         </div>
