@@ -356,23 +356,37 @@
         }
 
         // ----- last steder -----
-        fetch('locations.json')
-            .then(r => r.json())
-            .then(d => { alleSteder = d; oppdaterOversikt(); })
-            .catch(e => console.error('Feil ved lasting av locations.json', e));
+ // ----- last steder -----
+fetch('locations.json')
+    .then(r => r.json())
+    .then(d => { 
+        alleSteder = d; 
+        oppdaterOversikt(); // Kjør først NÅ når data er klar
+    })
+    .catch(e => console.error('Feil ved lasting av locations.json', e));
 
-        // ----- resultater -----
-        function oppdaterOversikt() {
-            if (!alleSteder.length) return;
-            alleResultater = alleSteder
-                .filter(l => l.kategori === hovedKategori && l.subkategori === underKategori)
-                .map(l => {
-                    const dist = getDistance(startPos.lat, startPos.lon, l.lat, l.lon);
-                    return { ...l, dist };
-                })
-                .sort((a, b) => a.dist - b.dist);
-            visResultater();
-        }
+// ----- resultater -----
+function oppdaterOversikt() {
+    if (!alleSteder || !alleSteder.length) {
+        document.getElementById('results').innerHTML = '<p class="text-slate-500 font-bold">Ingen steder tilgjengelig ennå.</p>';
+        return;
+    }
+
+    alleResultater = alleSteder
+        .filter(l => l.kategori === hovedKategori && l.subkategori === underKategori)
+        .map(l => {
+            const dist = getDistance(startPos.lat, startPos.lon, l.lat, l.lon);
+            return { ...l, dist };
+        })
+        .sort((a, b) => a.dist - b.dist);
+
+    if (!alleResultater.length) {
+        document.getElementById('results').innerHTML = '<p class="text-slate-500 font-bold">Ingen steder passer valgt kategori/subkategori.</p>';
+        return;
+    }
+
+    visResultater();
+}
 
         function visResultater() {
             const container = document.getElementById('results');
