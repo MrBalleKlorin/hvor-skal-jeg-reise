@@ -292,12 +292,25 @@ async function oppdaterOversikt() {
 
 // ----- render 5-på-gangen -----
 function renderResultater(){
-    const resDiv=document.getElementById('results');
-    if(alleResultater.length===0){resDiv.innerHTML='<div class="p-6 text-center text-slate-500">Ingen resultater å vise.</div>';return;}
-    let html=alleResultater.slice(0,antallSynligeResultater).map(s=>`
+    const resDiv = document.getElementById('results');
+    if(alleResultater.length === 0){
+        resDiv.innerHTML = '<div class="p-6 text-center text-slate-500">Ingen resultater å vise.</div>';
+        return;
+    }
+
+    // Helper for å formatere reisetid
+    function formatReisetid(minutter){
+        const t = Math.floor(minutter / 60);
+        const m = minutter % 60;
+        return t > 0 ? `${t} t ${m} min` : `${m} min`;
+    }
+
+    let html = alleResultater.slice(0, antallSynligeResultater).map(s => `
         <div class="card p-6 flex justify-between items-center group hover:border-blue-200 transition-all">
           <div class="flex-1 pr-4">
-            <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">${s.fylke} • CA ${s.reiseTid} MIN</span>
+            <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">
+                ${s.fylke} • CA ${formatReisetid(s.reiseTid)}
+            </span>
             <h3 class="text-2xl font-black text-slate-800 my-1">${s.navn}</h3>
             <div class="flex gap-2 mt-3 flex-wrap">
               <span class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-slate-100">🌡️ ${Math.round(s.t)}°C</span>
@@ -309,12 +322,14 @@ function renderResultater(){
           <img src="https://raw.githubusercontent.com/metno/weathericons/main/weather/png/${s.sym}.png" class="w-16 h-16 opacity-90 group-hover:scale-110 transition-transform" alt="${s.sym}">
         </div>
     `).join('');
-    if(antallSynligeResultater<alleResultater.length){
-        html+=`<div class="text-center">
+
+    if(antallSynligeResultater < alleResultater.length){
+        html += `<div class="text-center">
             <button onclick="visNeste()" class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold">Vis de 5 neste</button>
         </div>`;
     }
-    resDiv.innerHTML=html;
+
+    resDiv.innerHTML = html;
 }
 
 function visNeste(){antallSynligeResultater+=5;renderResultater();}
