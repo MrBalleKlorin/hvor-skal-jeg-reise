@@ -266,33 +266,27 @@ async function oppdaterOversikt() {
             const avstand = Math.sqrt(Math.pow(sted.lat - startPos.lat, 2) + Math.pow(sted.lon - startPos.lon, 2)) * 111;
 
             // --- Beregn match ---
-            let tempMatch = 100 - Math.abs(t - 20) * 5; // eksempel: optimal temperatur 20°C
-            let vindMatch = 100 - v * 10;               // mindre vind gir høyere match
-            let solPoeng = (sym.includes('clearsky') || sym.includes('fair')) ? 100 : 0; // sol=100, overskyet=0
-
+            let match;
             if (hovedKategori === 'sol') {
-                var totalMatch = solPoeng - avstand; // sol først, deretter nærhet
+                const solPoeng = (sym.includes('clearsky') || sym.includes('fair')) ? 100 : 0;
+                // Gi også litt poeng for nærhet (100% hvis <50 km, lineært ned til 0 ved 200 km)
+                const avstandPoeng = Math.max(0, Math.min(100, 100 - (avstand - 50) / 150 * 100));
+                match = Math.round((solPoeng * 0.7) + (avstandPoeng * 0.3)); // 70% sol, 30% nærhet
             } else {
-                var totalMatch = tempMatch + vindMatch; // eksisterende logikk for andre kategorier
+                match = beregnMatch({ temperatur: t, vind: v }, hovedKategori, underKategori);
             }
 
-            resultater.push({ ...sted, t, v, eff, sym, avstand, reiseTid: Math.round(avstand * 1.6 + 10), totalMatch });
+            resultater.push({ ...sted, t, v, eff, sym, avstand, reiseTid: Math.round(avstand * 1.6 + 10), match });
         } catch (e) {
             console.warn('Feil for sted', sted, e);
         }
     }
 
     // --- sortering ---
-    if (hovedKategori === 'sol') {
-        // vis steder med mest sol først, deretter nærmest
-        resultater.sort((a, b) => b.totalMatch - a.totalMatch);
-    } else {
-        // eksisterende: først match (ikke definert her, kan utvides senere), så avstand
-        resultater.sort((a, b) => a.avstand - b.avstand);
-    }
+    resultater.sort((a, b) => b.match - a.match || a.avstand - b.avstand);
 
     alleResultater = resultater;
-    antallSynligeResultater = 5; // starter med 5
+    antallSynligeResultater = 5;
     renderResultater();
 }
 
