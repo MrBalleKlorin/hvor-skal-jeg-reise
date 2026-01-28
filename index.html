@@ -179,7 +179,19 @@ let avreiseTid = new Date();
 let alleSteder = [];
 let marker;
 let alleResultater = [];
-let antallSynligeResultater = 5;
+let antallSynligeResultater = 5; 
+
+function vindRetningSymbol(deg) {
+    if(deg>=337.5 || deg<22.5) return 'N';
+    if(deg>=22.5 && deg<67.5) return 'NØ';
+    if(deg>=67.5 && deg<112.5) return 'Ø';
+    if(deg>=112.5 && deg<157.5) return 'SØ';
+    if(deg>=157.5 && deg<202.5) return 'S';
+    if(deg>=202.5 && deg<247.5) return 'SV';
+    if(deg>=247.5 && deg<292.5) return 'V';
+    if(deg>=292.5 && deg<337.5) return 'NV';
+}
+
 
 const subValg = {
     'snø': [{ id: 'langrenn', navn: '🎿 Langrenn' }, { id: 'alpint', navn: '🏂 Alpint' }],
@@ -305,23 +317,27 @@ function renderResultater(){
         return t > 0 ? `${t} t ${m} min` : `${m} min`;
     }
 
-    let html = alleResultater.slice(0, antallSynligeResultater).map(s => `
+let html = alleResultater.slice(0, antallSynligeResultater).map(s => {
+        const vindRetning = vindRetningSymbol(s.wind_deg ?? 0);
+        return `
         <div class="card p-6 flex justify-between items-center group hover:border-blue-200 transition-all">
           <div class="flex-1 pr-4">
             <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">
-                ${s.fylke} • CA ${formatReisetid(s.reiseTid)}
+                ${s.fylke} • CA ${Math.floor(s.reiseTid/60)} t ${s.reiseTid%60} min
             </span>
             <h3 class="text-2xl font-black text-slate-800 my-1">${s.navn}</h3>
             <div class="flex gap-2 mt-3 flex-wrap">
               <span class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-slate-100">🌡️ ${Math.round(s.t)}°C</span>
               <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-blue-100">Eff. temp: ${s.eff}°C</span>
-              <span class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-slate-100">Vind: ${Math.round(s.v)} m/s</span>
-              <span class="bg-green-50 text-green-700 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-green-100">Match: ${s.match}%</span>
+              <span class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-slate-100">Vind: ${Math.round(s.v)} m/s ${vindRetning}</span>
+              <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-blue-100">RH: ${Math.round(s.humidity ?? 0)}%</span>
+              <span class="bg-green-50 text-green-700 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-green-100">Snø: ${s.snow ?? 'N/A'} cm</span>
+              <span class="bg-red-50 text-red-700 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-red-100">Match: ${s.match ?? 'N/A'}%</span>
             </div>
           </div>
           <img src="https://raw.githubusercontent.com/metno/weathericons/main/weather/png/${s.sym}.png" class="w-16 h-16 opacity-90 group-hover:scale-110 transition-transform" alt="${s.sym}">
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 
     if(antallSynligeResultater < alleResultater.length){
         html += `<div class="text-center">
