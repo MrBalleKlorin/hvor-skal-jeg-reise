@@ -241,33 +241,58 @@ function beregnMatch(stedData,kategori,under) {
 
 // ----- resultater -----
 async function oppdaterOversikt() {
-    const resDiv=document.getElementById('results');
-    resDiv.innerHTML='<div class="p-10 text-center font-bold text-slate-300">Oppdaterer...</div>';
+    const resDiv = document.getElementById('results');
+    resDiv.innerHTML = '<div class="p-10 text-center font-bold text-slate-300">Oppdaterer...</div>';
 
-    let steder = alleSteder.filter(s => hovedKategori==='sol'? true : (s.hovedkategori===hovedKategori && s.underkategori===underKategori));
+    let steder = alleSteder.filter(s => hovedKategori === 'sol' ? true : (s.hovedkategori === hovedKategori && s.underkategori === underKategori));
     let resultater = [];
 
-    for(const sted of steder){
-        try{
-            const res=await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
-            if(!res.ok) continue;
-            const data=await res.json();
-            if(!data.properties||!Array.isArray(data.properties.timeseries)||data.properties.timeseries.length===0) continue;
-            const target=avreiseTid.getTime();
-            const varsel=data.properties.timeseries.reduce((p,c)=>Math.abs(new Date(c.time)-target)<Math.abs(new Date(p.time)-target)?c:p);
-            const t=varsel.data.instant.details.air_temperature;
-            const v=varsel.data.instant.details.wind_speed;
-            const eff=Math.round(13.12 + 0.6215*t - 11.37*Math.pow(v*3.6,0.16) + 0.3965*t*Math.pow(v*3.6,0.16));
-            const sym=varsel.data.next_1_hours? varsel.data.next_1_hours.summary.symbol_code:'clearsky_day';
-            const avstand=Math.sqrt(Math.pow(sted.lat-startPos.lat,2)+Math.pow(sted.lon-startPos.lon,2))*111;
-            const match=beregnMatch({temperatur:t,vind:v},hovedKategori,underKategori);
-            resultater.push({...sted,t,v,eff,sym,avstand,reiseTid:Math.round(avstand*1.6+10),match});
-        }catch(e){console.warn('Feil for sted',sted,e);}
+    for (const sted of steder) {
+        try {
+            const res = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${sted.lat}&lon=${sted.lon}`);
+            if (!res.ok) continue;
+            const data = await res.json();
+            if (!data.properties || !Array.isArray(data.properties.timeseries) || data.properties.timeseries.length === 0) continue;
+
+            const target = avreiseTid.getTime();
+            const varsel = data.properties.timeseries.reduce(
+                (prev, curr) => Math.abs(new Date(curr.time) - target) < Math.abs(new Date(prev.time) - target) ? curr : prev
+            );
+
+            const t = varsel.data.instant.details.air_temperature;
+            const v = varsel.data.instant.details.wind_speed;
+            const eff = Math.round(13.12 + 0.6215 * t - 11.37 * Math.pow(v * 3.6, 0.16) + 0.3965 * t * Math.pow(v * 3.6, 0.16));
+            const sym = varsel.data.next_1_hours ? varsel.data.next_1_hours.summary.symbol_code : 'clearsky_day';
+            const avstand = Math.sqrt(Math.pow(sted.lat - startPos.lat, 2) + Math.pow(sted.lon - startPos.lon, 2)) * 111;
+
+            // --- Beregn match ---
+            let tempMatch = 100 - Math.abs(t - 20) * 5; // eksempel: optimal temperatur 20°C
+            let vindMatch = 100 - v * 10;               // mindre vind gir høyere match
+            let solPoeng = (sym.includes('clearsky') || sym.includes('fair')) ? 100 : 0; // sol=100, overskyet=0
+
+            if (hovedKategori === 'sol') {
+                var totalMatch = solPoeng - avstand; // sol først, deretter nærhet
+            } else {
+                var totalMatch = tempMatch + vindMatch; // eksisterende logikk for andre kategorier
+            }
+
+            resultater.push({ ...sted, t, v, eff, sym, avstand, reiseTid: Math.round(avstand * 1.6 + 10), totalMatch });
+        } catch (e) {
+            console.warn('Feil for sted', sted, e);
+        }
     }
 
-    resultater.sort((a,b)=>b.match - a.match || a.avstand - b.avstand);
-    alleResultater=resultater;
-    antallSynligeResultater=5;
+    // --- sortering ---
+    if (hovedKategori === 'sol') {
+        // vis steder med mest sol først, deretter nærmest
+        resultater.sort((a, b) => b.totalMatch - a.totalMatch);
+    } else {
+        // eksisterende: først match (ikke definert her, kan utvides senere), så avstand
+        resultater.sort((a, b) => a.avstand - b.avstand);
+    }
+
+    alleResultater = resultater;
+    antallSynligeResultater = 5; // starter med 5
     renderResultater();
 }
 
