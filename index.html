@@ -192,6 +192,10 @@ let avreiseTid = new Date();
 let alleSteder = [];
 let marker;
 
+// --- Nye globale variabler for 5-på-gangen ---
+let alleResultater = [];
+let antallSynligeResultater = 5;
+
 const subValg = {
     'snø': [{ id: 'langrenn', navn: '🎿 Langrenn' }, { id: 'alpint', navn: '🏂 Alpint' }],
     'tur': [{ id: 'kyst', navn: '🌊 Kyst' }, { id: 'skog', navn: '🌲 Skog' }, { id: 'stier', navn: '🥾 Stier' }, { id: 'topper', navn: '⛰️ Topper' }, { id: 'byen', navn: '🏙️ I byen' }],
@@ -282,13 +286,20 @@ async function oppdaterOversikt() {
     }
 
     resultater.sort((a, b) => a.avstand - b.avstand);
+    alleResultater = resultater;
+    antallSynligeResultater = 5; // starter med 5
+    renderResultater();
+}
 
-    if (resultater.length === 0) {
+// --- render 5-på-gangen ---
+function renderResultater() {
+    const resDiv = document.getElementById('results');
+    if (alleResultater.length === 0) {
         resDiv.innerHTML = '<div class="p-6 text-center text-slate-500">Ingen resultater å vise (sjekk categories / locations.json).</div>';
         return;
     }
 
-    resDiv.innerHTML = resultater.map(s => `
+    let html = alleResultater.slice(0, antallSynligeResultater).map(s => `
         <div class="card p-6 flex justify-between items-center group hover:border-blue-200 transition-all">
           <div class="flex-1 pr-4">
             <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">${s.fylke} • CA ${s.reiseTid} MIN</span>
@@ -303,6 +314,20 @@ async function oppdaterOversikt() {
           <img src="https://raw.githubusercontent.com/metno/weathericons/main/weather/png/${s.sym}.png" class="w-16 h-16 opacity-90 group-hover:scale-110 transition-transform" alt="${s.sym}">
         </div>
     `).join('');
+
+    // knapp for å vise 5 neste
+    if (antallSynligeResultater < alleResultater.length) {
+        html += `<div class="text-center">
+            <button onclick="visNeste()" class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold">Vis de 5 neste</button>
+        </div>`;
+    }
+
+    resDiv.innerHTML = html;
+}
+
+function visNeste() {
+    antallSynligeResultater += 5;
+    renderResultater();
 }
 
 // ----- tid -----
